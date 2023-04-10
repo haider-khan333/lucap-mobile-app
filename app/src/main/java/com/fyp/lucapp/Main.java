@@ -16,33 +16,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class Main extends AppCompatActivity {
 
-    BottomNavigationView navigationView;
-//    FloatingActionButton book_appointment;
-//    Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        navigationView = findViewById(R.id.bottomnavigationbar);
+        BottomNavigationView navigationView = findViewById(R.id.bottomnavigationbar);
 
         navigationView.setBackground(null);
 
 
         //by default selection
         loadFragment(new DoctorListFragment(), 1);
-
-//        book_appointment.setOnClickListener(v -> {
-//            loadFragment(new DoctorListFragment(), 0);
-//            System.out.println("clicked");
-//        });
-
-
-        for (int i = 0; i < navigationView.getMenu().size(); i++) {
-            navigationView.getMenu().getItem(i).setChecked(false);
-        }
-
 
         //set a listener for the bottom navigation bar
         navigationView.setOnNavigationItemSelectedListener(item -> {

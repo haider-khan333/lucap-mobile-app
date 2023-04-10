@@ -52,14 +52,6 @@
 
             </com.google.android.material.bottomappbar.BottomAppBar>
 
-            <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-            <!--            android:id="@+id/book_appointment"-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:backgroundTint="@color/medical_blue"-->
-            <!--            android:src="@drawable/book_appointment"-->
-            <!--            app:layout_anchor="@id/bottomappbar" />-->
-
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
