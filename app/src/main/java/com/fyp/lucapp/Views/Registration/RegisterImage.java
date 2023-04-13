@@ -14,7 +14,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fyp.lucapp.Components.ComponentCustomDialogue;
+import com.fyp.lucapp.Components.ComponentLoader;
 import com.fyp.lucapp.Helper.Helper;
+import com.fyp.lucapp.Helper.LoaderUtils;
 import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.RegisterCallback;
 import com.fyp.lucapp.R;
@@ -27,10 +29,7 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
 
     private final int SELECT_PICTURE = 200;
     private Bitmap selectedImage;
-
-    private Button uploadButton;
-
-
+    private ComponentLoader componentLoader;
     private TextView age;
 
     private URL url;
@@ -54,9 +53,10 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
         String contactNumber = intent.getStringExtra("contactNumber");
         String gender = intent.getStringExtra("gender");
 
-        uploadButton = findViewById(R.id.uploadButton);
+        Button uploadButton = findViewById(R.id.uploadButton);
         nextButton = findViewById(R.id.nextButton);
         userImage = findViewById(R.id.userImage);
+        componentLoader = findViewById(R.id.component_loader);
         age = findViewById(R.id.age);
 
         nextButton.setEnabled(false);
@@ -64,25 +64,21 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
         age.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 checkNextButtonState();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
         uploadButton.setOnClickListener(v -> imageChooser());
 
         nextButton.setOnClickListener(e -> {
-
 
             if (selectedImage == null) {
                 ComponentCustomDialogue componentCustomDialogue = new ComponentCustomDialogue(this,
@@ -97,7 +93,9 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
                         contactNumber, gender, age, base64);
 
                 //lottie animation
-
+                componentLoader.setAnimation(R.raw.loader_anim);
+                LoaderUtils.showLoader(componentLoader);
+                nextButton.setEnabled(false);
                 url.registerPatient(register);
             }
 
@@ -111,7 +109,6 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
         boolean isImageEmpty = userImage == null;
         boolean isAgeValid = Integer.parseInt(age.getText().toString()) > 0
                 && Integer.parseInt(age.getText().toString()) < 150;
-
 
         nextButton.setEnabled(!isAgeEmpty && !isImageEmpty && isAgeValid);
     }
@@ -171,6 +168,8 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
 
     @Override
     public void onSuccess() {
+        LoaderUtils.hideLoader(componentLoader);
+        nextButton.setEnabled(true);
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -179,7 +178,8 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
 
     @Override
     public void onError(Object message) {
-
+        LoaderUtils.hideLoader(componentLoader);
+        nextButton.setEnabled(true);
         ComponentCustomDialogue componentCustomDialogue = new
                 ComponentCustomDialogue(this, "Error", message.toString()
                 , R.raw.cancel_animation);

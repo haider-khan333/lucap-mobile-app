@@ -1,11 +1,11 @@
 package com.fyp.lucapp.MainModels;
 
-import com.fyp.lucapp.BasicModels.Doctors;
+import com.fyp.lucapp.BasicModels.DoctorsData;
 import com.fyp.lucapp.BasicModels.Reviews;
 import com.fyp.lucapp.BasicModels.WorkTime;
 
 public class MainDoctorModel {
-    private Doctors doctor;
+    private DoctorsData doctor;
     private WorkTime workingTime;
     private Reviews reviews;
 
@@ -13,17 +13,17 @@ public class MainDoctorModel {
     public MainDoctorModel() {
     }
 
-    public MainDoctorModel(Doctors doctor, WorkTime workingTime, Reviews reviews) {
+    public MainDoctorModel(DoctorsData doctor, WorkTime workingTime, Reviews reviews) {
         this.doctor = doctor;
         this.workingTime = workingTime;
         this.reviews = reviews;
     }
 
-    public Doctors getDoctor() {
+    public DoctorsData getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(Doctors doctor) {
+    public void setDoctor(DoctorsData doctor) {
         this.doctor = doctor;
     }
 

@@ -12,12 +12,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fyp.lucapp.BasicModels.Doctors;
+import com.fyp.lucapp.BasicModels.DoctorsData;
 import com.fyp.lucapp.BasicModels.WorkTime;
 import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.URL;
-import com.fyp.lucapp.Interface.ApiCallBack;
+import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.Interface.OnClickSubmit;
 import com.fyp.lucapp.Main;
 import com.fyp.lucapp.R;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class DoctorDetailsActivity extends AppCompatActivity implements ApiCallBack, OnClickSubmit {
+public class DoctorDetailsActivity extends AppCompatActivity implements InterfaceApi, OnClickSubmit {
 
 
     private class DoctorDetails {
@@ -63,7 +63,7 @@ public class DoctorDetailsActivity extends AppCompatActivity implements ApiCallB
 
     private OnClickSubmit onClickSubmit;
 
-    private ApiCallBack apiCallBack;
+    private InterfaceApi interfaceApi;
 
 
     @Override
@@ -74,9 +74,9 @@ public class DoctorDetailsActivity extends AppCompatActivity implements ApiCallB
         days = new ArrayList<>();
 
         this.onClickSubmit = this;
-        this.apiCallBack = this;
+        this.interfaceApi = this;
 
-        URL url = new URL(this, this.apiCallBack);
+        URL url = new URL(this, this.interfaceApi);
 
 
         //bind the views
@@ -99,8 +99,8 @@ public class DoctorDetailsActivity extends AppCompatActivity implements ApiCallB
 
 
         //get data from intent
-        Doctors doctors = (Doctors) getIntent().getSerializableExtra("doctor");
-        int doctorId = doctors.getId();
+        DoctorsData doctorsData = (DoctorsData) getIntent().getSerializableExtra("doctor");
+        int doctorId = doctorsData.getId();
         url.getSpecificDoctor(doctorId);
 
 

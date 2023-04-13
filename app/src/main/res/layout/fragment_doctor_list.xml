@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragments.DoctorListFragment">
+    tools:context=".Fragments.DoctorsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:fontFamily="@font/poppins_light"
-        android:text="@string/doctors"
+        android:text="@string/doctorsData"
         android:textSize="20sp" />
 
     <RelativeLayout
@@ -49,13 +49,21 @@
         android:layout_height="match_parent"
         tools:context=".DoctorListFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/doctorRecyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/doctorRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
         <com.fyp.lucapp.Components.ComponentLoader
             android:id="@+id/component_loader"

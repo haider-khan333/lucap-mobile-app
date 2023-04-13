@@ -95,9 +95,14 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
+        <com.fyp.lucapp.Components.ComponentLoader
+            android:id="@+id/component_loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/nextButton"
@@ -108,7 +113,7 @@
             android:background="@xml/button_background"
             android:drawableEnd="@drawable/right_arrow_foreground"
             android:fontFamily="@font/poppins_semibold"
-            android:gravity="left|center_vertical"
+            android:gravity="start|center_vertical"
             android:text="@string/register"
             android:textAllCaps="false"
             android:textColor="@color/white"

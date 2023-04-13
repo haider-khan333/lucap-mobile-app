@@ -21,13 +21,34 @@
         android:padding="10dp"
         android:textSize="17sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/reportRecyclerView"
-        android:layout_height="match_parent"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:name="com.fyp.lucapp.ItemFragment"
-        android:orientation="vertical"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".Fragments.ReportFragment" />
+        android:layout_height="match_parent">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reportRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+        <com.fyp.lucapp.Components.ComponentLoader
+            android:id="@+id/component_loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
 </LinearLayout>
 

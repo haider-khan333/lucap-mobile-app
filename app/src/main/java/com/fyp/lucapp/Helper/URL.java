@@ -7,7 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.fyp.lucapp.Interface.ApiCallBack;
+import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.Interface.LoginCallback;
 import com.fyp.lucapp.Interface.OnClickSubmit;
 import com.fyp.lucapp.Interface.RegisterCallback;
@@ -18,13 +18,15 @@ import com.fyp.lucapp.Schemas.RegisterPatientSchema;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
+
 public class URL {
     public static String LOGGED_IN_PATIENT_ID = "";
     public static String IP = "192.168.1.65:8000";
     public final String PATIENT_LOGIN = "http://" + IP + "/patient/login";
     public final String PATIENT_REGISTER = "http://" + IP + "/patient/signup";
     public final String GET_DOCTORS = "http://" + IP + "/doctor/get-doctors";
-    public final String GET_REPORTS = "http://" + IP + "/patient/get-reports";
+    public final String GET_REPORTS = "http://" + IP + "/report/get-report";
 
     public final String GET_APPOINTMENTS = "http://" + IP + "/patient/getappointments";
 
@@ -35,7 +37,7 @@ public class URL {
 
     public OnClickSubmit onClickSubmit;
 
-    public ApiCallBack apiCallBack;
+    public InterfaceApi interfaceApi;
 
 
     public URL(Context context, LoginCallback loginCallback) {
@@ -49,9 +51,9 @@ public class URL {
         this.registerCallback = registerCallback;
     }
 
-    public URL(Context context, ApiCallBack apiCallBack) {
+    public URL(Context context, InterfaceApi interfaceApi) {
         this.context = context;
-        this.apiCallBack = apiCallBack;
+        this.interfaceApi = interfaceApi;
     }
 
     public URL(Context context, OnClickSubmit onClick) {
@@ -165,19 +167,16 @@ public class URL {
                 null, response -> {
             try {
                 JSONArray doctorsJsonList = response.getJSONArray("doctors_list");
-                apiCallBack.onSuccess(doctorsJsonList);
+                interfaceApi.onSuccess(doctorsJsonList);
 
 
             } catch
             (Exception e) {
                 e.printStackTrace();
-                apiCallBack.onError(e.toString());
+                interfaceApi.onError(e.toString());
             }
         }, error -> {
-            //get status code from error
-//            String statusCode = String.valueOf(error.networkResponse.statusCode);
-//            System.out.println("Error: " + statusCode);
-            apiCallBack.onError(error);
+            interfaceApi.onError(error.toString());
 
 
         });
@@ -198,18 +197,18 @@ public class URL {
                 null, response -> {
             try {
                 JSONObject doctorJson = response.getJSONObject("doctors_list");
-                apiCallBack.onSuccess(doctorJson);
+                interfaceApi.onSuccess(doctorJson);
 
             } catch
             (Exception e) {
                 e.printStackTrace();
-                apiCallBack.onError(e.toString());
+                interfaceApi.onError(e.toString());
             }
         }, error -> {
             //get status code from error
             String statusCode = String.valueOf(error.networkResponse.statusCode);
             System.out.println("Error: " + statusCode);
-            apiCallBack.onError(error);
+            interfaceApi.onError(error);
         }
         );
 
@@ -228,18 +227,34 @@ public class URL {
                 GET_REPORTS + "/" + URL.LOGGED_IN_PATIENT_ID,
                 null, response -> {
             try {
-                JSONArray reportsJsonList = response.getJSONArray("reports_list");
-                apiCallBack.onSuccess(reportsJsonList);
+                JSONArray reportList = response.getJSONArray("report_list");
+                interfaceApi.onSuccess(reportList);
             } catch
             (Exception e) {
                 e.printStackTrace();
-                apiCallBack.onError(e.toString());
+                interfaceApi.onError(e.toString());
             }
         }, error -> {
             //get status code from error
-            String statusCode = String.valueOf(error.networkResponse.statusCode);
-            System.out.println("Error: " + statusCode);
-            apiCallBack.onError(error);
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceApi.onError("No reports found");
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceApi.onError(errorMessage);
+            }
 
         });
 
@@ -259,17 +274,17 @@ public class URL {
                 null, response -> {
             try {
                 JSONArray reportsJsonList = response.getJSONArray("appointments");
-                apiCallBack.onSuccess(reportsJsonList);
+                interfaceApi.onSuccess(reportsJsonList);
             } catch
             (Exception e) {
                 e.printStackTrace();
-                apiCallBack.onError(e.toString());
+                interfaceApi.onError(e.toString());
             }
         }, error -> {
             //get status code from error
             String statusCode = String.valueOf(error.networkResponse.statusCode);
             System.out.println("Error: " + statusCode);
-            apiCallBack.onError(error);
+            interfaceApi.onError(error);
 
         });
 

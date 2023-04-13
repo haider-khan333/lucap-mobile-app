@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fyp.lucapp.Adapters.ReviewListAdapterView;
 import com.fyp.lucapp.Interface.AdapterInterface;
 import com.fyp.lucapp.R;
-import com.fyp.lucapp.databinding.ReportCardViewBinding;
+//import com.fyp.lucapp.databinding.ReportCardViewBinding;
 
 public class ReviewsFragment extends Fragment implements AdapterInterface {
 
@@ -48,10 +48,10 @@ public class ReviewsFragment extends Fragment implements AdapterInterface {
         return view;
     }
 
-    @Override
-    public void onDownloadClicked(ReportCardViewBinding binding, int position) {
-
-    }
+//    @Override
+//    public void onDownloadClicked(ReportCardViewBinding binding, int position) {
+//
+//    }
 
 
     @Override

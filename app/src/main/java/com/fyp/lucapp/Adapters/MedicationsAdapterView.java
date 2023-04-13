@@ -46,20 +46,20 @@ public class MedicationsAdapterView extends RecyclerView.Adapter<MedicationsAdap
         Medications medication = medicationList.get(position);
         holder.medicineName.setText(medication.getMedicineName());
         holder.medicineGrams.setText(medication.getMedicineGrams());
-        holder.startDate.setText(medication.getStartDate().toString());
-        holder.endDate.setText(medication.getEndDate().toString());
-        //get the values from list and print them on the text views
-        //clear the text from medicine text View
-        holder.medicineTime.setText("");
-        for (int i = 0; i < medication.getMedicineTime().size(); i++) {
-            System.out.println("size of list is : " + medication.getMedicineTime().size());
-            holder.medicineTime.append(medication.getMedicineTime().get(i) + "\n");
-        }
-
-
-//        medication.getMedicineTime().forEach(time -> holder.medicineTime.append(time + "\n"));
-        holder.medicineGenerationTime.setText(medication.getMedicineGeneratedTime().
-                toString());
+//        holder.startDate.setText(medication.getStartDate().toString());
+//        holder.endDate.setText(medication.getEndDate().toString());
+//        //get the values from list and print them on the text views
+//        //clear the text from medicine text View
+//        holder.medicineTime.setText("");
+//        for (int i = 0; i < medication.getMedicineTime().size(); i++) {
+//            System.out.println("size of list is : " + medication.getMedicineTime().size());
+//            holder.medicineTime.append(medication.getMedicineTime().get(i) + "\n");
+//        }
+//
+//
+////        medication.getMedicineTime().forEach(time -> holder.medicineTime.append(time + "\n"));
+//        holder.medicineGenerationTime.setText(medication.getMedicineGeneratedTime().
+//                toString());
 
 
     }

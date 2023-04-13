@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.fyp.lucapp.Interface.RegisterCallback;
 import com.fyp.lucapp.R;
 
-public class RegisterPatient extends AppCompatActivity implements RegisterCallback {
+public class RegisterPatient extends AppCompatActivity {
 
     private Button nextBtn;
 
@@ -90,7 +90,6 @@ public class RegisterPatient extends AppCompatActivity implements RegisterCallba
 
     }
 
-
     private void checkNextButtonState() {
         boolean isTextEmpty = txtContactNumber.getText().toString().isEmpty();
         boolean isNumberValid = txtContactNumber.getText().toString().length() == 11;
@@ -98,14 +97,4 @@ public class RegisterPatient extends AppCompatActivity implements RegisterCallba
         nextBtn.setEnabled(!isTextEmpty && !isRadioGroupEmpty && isNumberValid);
     }
 
-
-    @Override
-    public void onSuccess() {
-
-    }
-
-    @Override
-    public void onError(Object message) {
-
-    }
 }

@@ -15,10 +15,12 @@ import com.fyp.lucapp.R;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private TextView txtFirstName, txtLastName, txtEmail, txtPassword, txtConfirmPassword;
+    private TextView txtFirstName;
+    private TextView txtLastName;
+    private TextView txtEmail;
+    private TextView txtPassword;
+    private TextView txtConfirmPassword;
     private Button nextBtn;
-
-    private URL url;
 
 
     @Override
@@ -35,77 +37,8 @@ public class RegistrationActivity extends AppCompatActivity {
         txtConfirmPassword = findViewById(R.id.confirmPassword);
         nextBtn = findViewById(R.id.nextButton);
 
-
         nextBtn.setEnabled(false);
         txtFirstName.requestFocus();
-        txtFirstName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkNextButtonState();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        txtLastName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkNextButtonState();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        txtEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkNextButtonState();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        txtPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkNextButtonState();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
         txtConfirmPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

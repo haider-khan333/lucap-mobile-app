@@ -4,11 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.pdf.PdfDocument;
 
 import com.fyp.lucapp.BasicModels.Data;
-import com.fyp.lucapp.BasicModels.Doctors;
-import com.fyp.lucapp.MainModels.MainDoctorModel;
+import com.fyp.lucapp.BasicModels.DoctorsData;
+import com.fyp.lucapp.BasicModels.Medications;
+import com.fyp.lucapp.BasicModels.ReportData;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,7 +25,7 @@ public class Helper {
      *
      * @return
      */
-    public static Doctors getDoctor(int position) {
+    public static DoctorsData getDoctor(int position) {
         return Data.doctors.get(position);
     }
 
@@ -44,51 +45,124 @@ public class Helper {
         return android.util.Base64.encodeToString(byteArray, android.util.Base64.DEFAULT);
     }
 
-    /**
-     * Save PDF file to local storage
-     */
-    public static boolean savePDFFile(String fileName, PdfDocument pdfDocument) {
-        try {
-            File file = new File(fileName);
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            pdfDocument.writeTo(fileOutputStream);
-            fileOutputStream.close();
-            pdfDocument.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+
+    public static String getFormattedDate(String date) {
+        StringBuilder formattedDate = new StringBuilder();
+        for (int i = 0; i < date.length(); i++) {
+            if (i == 1) {
+                formattedDate.append(date.charAt(i)).append(" ");
+            } else if (i == 3) {
+                String month = toMonth(date.substring(i - 1, i + 1));
+                System.out.println("month " + month);
+                System.out.println("date " + date.substring(i - 1, i + 1));
+                formattedDate.append(month).append(", ");
+            } else {
+                if (i == 2) {
+                    formattedDate.append("");
+                } else {
+                    formattedDate.append(date.charAt(i));
+                }
+            }
+        }
+        return formattedDate.toString();
+    }
+
+    public static String toMonth(String month) {
+        switch (month) {
+            case "01":
+                return "January";
+            case "02":
+                return "February";
+            case "03":
+                return "March";
+            case "04":
+                return "April";
+            case "05":
+                return "May";
+            case "06":
+                return "June";
+            case "07":
+                return "July";
+            case "08":
+                return "August";
+            case "09":
+                return "September";
+            case "10":
+                return "October";
+            case "11":
+                return "November";
+            case "12":
+                return "December";
+            default:
+                return "null";
         }
     }
 
-    public static ArrayList<Doctors> getDoctors(JSONArray docList) {
-        ArrayList<Doctors> doctorsArrayList = new ArrayList<>();
+    public static ArrayList<DoctorsData> getDoctors(JSONArray docList) {
+        ArrayList<DoctorsData> doctorsDataArrayList = new ArrayList<>();
         try {
             for (int i = 0; i < docList.length(); i++) {
-                Doctors doctors = new Doctors();
-                doctors.setId(docList.getJSONObject(i).getInt("id"));
-                doctors.setUsername(docList.getJSONObject(i).getString("username"));
-                doctors.setImage(docList.getJSONObject(i).getString("image"));
-                doctors.setSpeciality(docList.getJSONObject(i).getString("speciality"));
-                doctors.setYearsOfExperience(docList.getJSONObject(i).getInt("years_of_experience"));
-                doctors.setEmail(docList.getJSONObject(i).getString("email"));
-                doctors.setPhone(docList.getJSONObject(i).getString("phone"));
-                doctorsArrayList.add(doctors);
+                DoctorsData doctorsData = new DoctorsData();
+                doctorsData.setId(docList.getJSONObject(i).getInt("id"));
+                doctorsData.setUsername(docList.getJSONObject(i).getString("username"));
+                doctorsData.setImage(docList.getJSONObject(i).getString("image"));
+                doctorsData.setSpeciality(docList.getJSONObject(i).getString("speciality"));
+                doctorsData.setYearsOfExperience(docList.getJSONObject(i).getInt("years_of_experience"));
+                doctorsData.setEmail(docList.getJSONObject(i).getString("email"));
+                doctorsData.setPhone(docList.getJSONObject(i).getString("phone"));
+                doctorsDataArrayList.add(doctorsData);
             }
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        return doctorsArrayList;
+        return doctorsDataArrayList;
     }
 
-//    public static List<MainDoctorModel> parseDoctors(JSONArray doctorsList,
-//                                                     JSONArray workingList,
-//                                                     JSONArray ratingList) throws JSONException {
-//        List<MainDoctorModel> mainDoctorsList = new ArrayList<>();
-//
-//
-//    }
+
+    public static ArrayList<ReportData> getReportList(JSONArray reportList) {
+        ArrayList<ReportData> reportDataArrayList = new ArrayList<>();
+        try {
+            for (int i = 0; i < reportList.length(); i++) {
+                ReportData reportData = new ReportData();
+                reportData.setPatientName(reportList.getJSONObject(i).optString("patient_name"));
+                reportData.setDoctorName(reportList.getJSONObject(i).optString("doctor_name"));
+                reportData.setDoctorSpeciality(reportList.getJSONObject(i).optString("doctor_speciality"));
+                reportData.setNoduleType(reportList.getJSONObject(i).optString("cancer_type"));
+                reportData.setNoduleLobe(reportList.getJSONObject(i).optString("cancer_lobe"));
+                reportData.setDate(reportList.getJSONObject(i).optString("date"));
+                reportData.setTime(reportList.getJSONObject(i).optString("time"));
+                reportData.setDescription(reportList.getJSONObject(i).optString("description"));
+                reportData.setReportID(reportList.getJSONObject(i).optString("id"));
+
+                List<Medications> medicationsList = new ArrayList<>();
+                JSONArray medications = reportList.getJSONObject(i).optJSONArray("medications");
+                if (medications != null) {
+                    for (int j = 0; j < medications.length(); j++) {
+                        JSONObject medicationObject = medications.optJSONObject(j);
+                        Medications medication = new Medications();
+                        medication.setMedicineName(medicationObject.optString("medicine_name"));
+                        medication.setMedicineGrams(medicationObject.optString("medicine_grams"));
+                        medication.setMedicineDosage(medicationObject.optString("medicine_dosage"));
+                        medication.setMedicineFrequency(medicationObject.optString("medicine_frequency"));
+                        medicationsList.add(medication);
+                    }
+                    reportData.setMedicationsList(medicationsList);
+
+                } else {
+                    reportData.setMedicationsList(null);
+                }
+                reportDataArrayList.add(reportData);
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return reportDataArrayList;
+
+    }
 
 
 }

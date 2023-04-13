@@ -1,65 +1,44 @@
 package com.fyp.lucapp.Fragments;
 
-import android.content.ContextWrapper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.graphics.pdf.PdfDocument;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.fyp.lucapp.Adapters.ReportsAdapterView;
-import com.fyp.lucapp.BasicModels.Medications;
+import com.fyp.lucapp.BasicModels.ReportData;
+import com.fyp.lucapp.Components.ComponentCustomDialogue;
+import com.fyp.lucapp.Components.ComponentLoader;
+import com.fyp.lucapp.Helper.DocumentUtils;
 import com.fyp.lucapp.Helper.Helper;
+import com.fyp.lucapp.Helper.LoaderUtils;
 import com.fyp.lucapp.Helper.URL;
-import com.fyp.lucapp.Interface.AdapterInterface;
-import com.fyp.lucapp.BasicModels.Data;
-import com.fyp.lucapp.Interface.ApiCallBack;
+import com.fyp.lucapp.Interface.InterfaceApi;
+import com.fyp.lucapp.Interface.InterfaceClickItem;
 import com.fyp.lucapp.R;
-import com.fyp.lucapp.databinding.ReportCardViewBinding;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
+import org.json.JSONArray;
+
 import java.util.ArrayList;
-import java.util.List;
 
-public class ReportFragment extends Fragment implements AdapterInterface, ApiCallBack {
-
-
-    public class ReportDetails {
-
-        public String reportID;
-        public String date;
-        public String time;
-        public String doctorName;
-        public String patientName;
-        public String doctorSpeciality;
-        public String description;
-        public String noduleType;
-        public String noduleLobe;
-        public List<Medications> medicationsList = new ArrayList<>();
-
-    }
-
+public class ReportFragment extends Fragment implements InterfaceApi, InterfaceClickItem {
     private RecyclerView recyclerView;
-
-    private ReportDetails reportDetails;
-
     private URL url;
+    private ArrayList<ReportData> reportDataList;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ComponentLoader componentLoader;
 
     public ReportFragment() {
     }
@@ -85,8 +64,30 @@ public class ReportFragment extends Fragment implements AdapterInterface, ApiCal
                 false);
         url = new URL(getContext(), this);
         recyclerView = view.findViewById(R.id.reportRecyclerView);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        componentLoader = view.findViewById(R.id.component_loader);
+
         ReportsAdapterView reportsAdapterView = new ReportsAdapterView();
         recyclerView.setAdapter(reportsAdapterView);
+
+        swipeRefreshLayout.setOnRefreshListener(this::refreshData);
+
+        EditText searchEditText = view.findViewById(R.id.editName);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterReports(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
 
         DividerItemDecoration dividerItemDecoration = new
                 DividerItemDecoration(recyclerView.getContext(),
@@ -94,277 +95,86 @@ public class ReportFragment extends Fragment implements AdapterInterface, ApiCal
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_item));
         recyclerView.addItemDecoration(dividerItemDecoration);
 
+
+        componentLoader.setAnimation(R.raw.loader_anim);
+        LoaderUtils.showLoader(componentLoader);
         url.getReports();
         return view;
     }
 
-
-    @Override
-    public void onDownloadClicked(ReportCardViewBinding binding, int position) {
-        String reportID = reportDetails.reportID;
-        String patientName = reportDetails.patientName;
-        String doctorName = reportDetails.doctorName;
-        String date = reportDetails.date;
-        String time = reportDetails.time;
-        String description = reportDetails.description;
-        String noduleType = reportDetails.noduleType;
-        String noduleLobe = reportDetails.noduleLobe;
-        String doctorSpeciality = reportDetails.doctorSpeciality;
-        List<Medications> medicationsList = reportDetails.medicationsList;
-
-
-        PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(700,
-                500, 1).create();
-        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-        Paint paint = new Paint();
-
-
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.NORMAL));
-        paint.setTextSize(25);
-        paint.setTextAlign(Paint.Align.CENTER);
-        page.getCanvas().drawText("(Medical Report)", 350, 50, paint);
-
-        //make a line
-        paint.setStrokeWidth(2);
-        paint.setStyle(Paint.Style.STROKE);
-        page.getCanvas().drawLine(10, 60, 690, 60, paint);
-
-        //reset the stroke width
-        paint.setStrokeWidth(0);
-        paint.setStyle(Paint.Style.FILL);
-
-
-        //make the "Report ID" text bold and the value of it normal
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("Report ID: ", 10, 100, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        page.getCanvas().drawText(reportID, 120, 100, paint);
-
-
-        //TODO:code for report generation details
-        //make the "Report Generated At" text bold and the value of it normal and place it on the right side
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("(Report Generation Details)",
-                400, 100, paint);
-
-        //create a new line
-        paint.setStrokeWidth(0.5f);
-        paint.setColor(Color.GRAY);
-        paint.setStyle(Paint.Style.STROKE);
-        page.getCanvas().drawLine(400, 110, 690, 110, paint);
-
-        //reset the stroke width
-        paint.setStrokeWidth(0);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
-
-
-        //make the "Date" text bold and the value of it normal
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("Date: ", 400, 130, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
-        page.getCanvas().drawText(date, 600, 130, paint);
-
-        //make the "Day" text bold and the value of it normal
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("Time: ", 400, 150, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
-        page.getCanvas().drawText(time, 600, 150, paint);
-
-
-        //TODO: code snippet for the results of the cancer detections
-        //make the "Results" text bold and the value of it normal and place it on the right side
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("(Cancer Details)",
-                400, 200, paint);
-
-        //create a new line
-        paint.setStrokeWidth(0.5f);
-        paint.setColor(Color.GRAY);
-        paint.setStyle(Paint.Style.STROKE);
-        page.getCanvas().drawLine(400, 210, 690, 210, paint);
-
-        //reset the stroke width
-        paint.setStrokeWidth(0);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
-
-
-        //make the "Detections" text bold and the value of it normal
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("Cancer (if any): ", 400, 230, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
-        page.getCanvas().drawText(noduleType.equals("normal")
-                ? "YES" : "NO", 600, 230, paint);
-
-        //make the "Cancer" text bold and the value of it normal
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("Cancer type (if any): ", 400, 250, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
-        page.getCanvas().drawText(noduleType, 600, 250, paint);
-
-        //make the "Cancer Location" text bold and the value of it normal
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("Cancer Location: ", 400, 270, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
-        page.getCanvas().drawText(noduleLobe, 600, 270, paint);
-
-
-        //TODO: code snippet for the patient details
-        //make the "Patient Name" text bold and the value of it normal
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("Patient Name: ", 10, 120, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        page.getCanvas().drawText(patientName, 120, 120, paint);
-
-        //TODO: code snippet for the Doctor details
-        //make the "Doctor Name" text bold and the value of it normal
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("Doctor Name: ", 10, 140, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        page.getCanvas().drawText(doctorName, 120, 140, paint);
-
-
-        //TODO: code snippet for the Description of the report
-        //make the "Description" text bold and the value of it normal
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page.getCanvas().drawText("Description: ", 10, 160, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-
-        TextPaint mTextPaint = new TextPaint();
-        StaticLayout mTextLayout = new StaticLayout(description, mTextPaint,
-                page.getCanvas().getWidth() - 370, Layout.Alignment.ALIGN_NORMAL,
-                1.0f, 0.0f, false);
-        page.getCanvas().save();
-        int textX = 10;
-        int textY = 170;
-        page.getCanvas().translate(textX, textY);
-        mTextLayout.draw(page.getCanvas());
-        page.getCanvas().restore();
-
-        //make a vertical grey line
-        paint.setStrokeWidth(0.5f);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.GRAY);
-        page.getCanvas().drawLine(380, 60, 380, 500, paint);
-
-        //reset the stroke width
-        paint.setStrokeWidth(0);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
-
-
-        pdfDocument.finishPage(page);
-
-        //TODO: second page
-        PdfDocument.PageInfo pageInfo2 = new PdfDocument.PageInfo.Builder(700,
-                500, 2).create();
-        PdfDocument.Page page2 = pdfDocument.startPage(pageInfo2);
-
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.NORMAL));
-        paint.setTextSize(25);
-        paint.setTextAlign(Paint.Align.CENTER);
-        page2.getCanvas().drawText("(Medical Report)", 350, 50, paint);
-
-        //make a line
-        paint.setStrokeWidth(2);
-        paint.setStyle(Paint.Style.STROKE);
-        page2.getCanvas().drawLine(10, 60, 690, 60, paint);
-
-        //reset the stroke width
-        paint.setStrokeWidth(0);
-        paint.setStyle(Paint.Style.FILL);
-
-
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD));
-        paint.setTextSize(15);
-        paint.setTextAlign(Paint.Align.LEFT);
-        page2.getCanvas().drawText("Medications: ", 10, 100, paint);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-
-        //add the medications
-//        TextPaint mTextPaint2 = new TextPaint();
-//        StaticLayout mTextLayout2 = new StaticLayout("",mTextPaint2,
-//                page2.getCanvas().getWidth() - 370, Layout.Alignment.ALIGN_NORMAL,
-//                1.0f, 0.0f, false);
-
-        //add picture to the pdf
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-//                R.drawable.lucapp);
-//        //resize the bitmap to keep the aspect ratio
-//        int width = bitmap.getWidth();
-//        int height = bitmap.getHeight();
-//        int newWidth = 500;
-//        int newHeight = 350;
-//        float scaleWidth = ((float) newWidth) / width;
-//        float scaleHeight = ((float) newHeight) / height;
-//        Matrix matrix = new Matrix();
-//        matrix.postScale(scaleWidth, scaleHeight);
-//        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
-//                matrix, false);
-//        page2.getCanvas().drawBitmap(resizedBitmap, 10, 120, paint);
-
-        pdfDocument.finishPage(page2);
-
-
-        //save pdf
-        if (Helper.savePDFFile(getFilePath(reportID), pdfDocument)) {
-            Snackbar.make(binding.getRoot(), "Report Downloaded",
-                    Snackbar.LENGTH_SHORT).show();
-        } else {
-            Snackbar.make(binding.getRoot(), "Report Download Failed",
-                    Snackbar.LENGTH_SHORT).show();
+    private void refreshData() {
+        if (swipeRefreshLayout.isRefreshing()) {
+            url.getReports();
         }
-
-    }
-
-    @Override
-    public void onClick(View view, int position) {
-
     }
 
 
-    private String getFilePath(String ID) {
-        ContextWrapper contextWrapper = new ContextWrapper(getActivity());
-        File downloadDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-        //create a unique file name
-        File file = new File(downloadDirectory, "ID_" + ID + "_" + System.currentTimeMillis()
-                + ".pdf");
-        System.out.println("File path: " + file.getPath());
-        return file.getPath();
-    }
-
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onSuccess(Object object) {
+        LoaderUtils.hideLoader(componentLoader);
+        JSONArray reportList = (JSONArray) object;
+        reportDataList = Helper.getReportList(reportList);
+        ReportsAdapterView reportsAdapterView = new ReportsAdapterView(reportDataList,
+                this);
+        recyclerView.setAdapter(reportsAdapterView);
+        reportsAdapterView.notifyDataSetChanged();
+
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
 
 
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterReports(String text) {
+        boolean found = false;
+        ArrayList<ReportData> filteredList = new ArrayList<>();
+        for (ReportData item : reportDataList) {
+            String name = item.getDoctorName().toLowerCase();
+            String speciality = item.getDoctorSpeciality().toLowerCase();
+
+            if (name.contains(text.toLowerCase()) || speciality.contains(text.toLowerCase())) {
+                filteredList.add(item);
+                found = true;
+            }
+        }
+        ReportsAdapterView adapter = new ReportsAdapterView(filteredList,
+                this);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        if (!found) {
+            componentLoader.setAnimation(R.raw.not_found_anim);
+            LoaderUtils.showLoader(componentLoader);
+        } else {
+            LoaderUtils.hideLoader(componentLoader);
+        }
     }
 
     @Override
     public void onError(Object message) {
+        LoaderUtils.hideLoader(componentLoader);
+        ComponentCustomDialogue componentCustomDialogue = new ComponentCustomDialogue
+                (getContext(),
+                        "Invalid request", message.toString(),
+                        R.raw.cancel_animation);
+        componentCustomDialogue.onShow();
+
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        System.out.println("Item clicked  + " + position);
+        ReportData reportDetails = reportDataList.get(position);
+        boolean flag = DocumentUtils.createPDF(reportDetails, getContext());
+        if (flag) {
+            Snackbar.make(getView(), "Report saved successfully", Snackbar.LENGTH_LONG).show();
+        } else {
+            Snackbar.make(getView(), "Report not saved", Snackbar.LENGTH_LONG).show();
+        }
+
 
     }
 

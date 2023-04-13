@@ -48,4 +48,8 @@ public class ComponentLoader extends FrameLayout {
             animationView.pauseAnimation();
         }
     }
+
+    public void setAnimation(int animation) {
+        animationView.setAnimation(animation);
+    }
 }

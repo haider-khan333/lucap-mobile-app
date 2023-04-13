@@ -11,7 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.fyp.lucapp.Adapters.ViewPagerAdapter;
 import com.fyp.lucapp.Interface.AdapterInterface;
 import com.fyp.lucapp.R;
-import com.fyp.lucapp.databinding.ReportCardViewBinding;
+//import com.fyp.lucapp.databinding.ReportCardViewBinding;
 import com.google.android.material.tabs.TabLayout;
 
 public class AppointmentListFragment extends Fragment {

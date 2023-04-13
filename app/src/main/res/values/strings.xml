@@ -108,5 +108,6 @@
     <string name="age">Age</string>
     <string name="enter_age">Enter your age</string>
     <string name="search_reports">Search reports</string>
-    <string name="doctors">Doctors</string>
+    <string name="doctorsData">Doctors</string>
+    <string name="reports">Reports</string>
 </resources>

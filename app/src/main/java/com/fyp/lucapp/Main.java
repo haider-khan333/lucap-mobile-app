@@ -1,18 +1,16 @@
 package com.fyp.lucapp;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.fyp.lucapp.Fragments.Appointments.AppointmentListFragment;
-import com.fyp.lucapp.Fragments.DoctorListFragment;
+import com.fyp.lucapp.Fragments.DoctorsFragment;
 import com.fyp.lucapp.Fragments.MedicationsFragment;
 import com.fyp.lucapp.Fragments.ProfileFragment;
 import com.fyp.lucapp.Fragments.ReportFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class Main extends AppCompatActivity {
 
@@ -27,7 +25,7 @@ public class Main extends AppCompatActivity {
 
 
         //by default selection
-        loadFragment(new DoctorListFragment(), 1);
+        loadFragment(new DoctorsFragment(), 1);
 
         //set a listener for the bottom navigation bar
         navigationView.setOnNavigationItemSelectedListener(item -> {
@@ -48,7 +46,7 @@ public class Main extends AppCompatActivity {
                     break;
 
                 case R.id.nav_book_doctor:
-                    loadFragment(new DoctorListFragment(), 0);
+                    loadFragment(new DoctorsFragment(), 0);
                     break;
             }
             return true;
