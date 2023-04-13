@@ -7,51 +7,60 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fyp.lucapp.Components.ComponentDoctorList;
 import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Interface.AdapterInterface;
 import com.fyp.lucapp.BasicModels.Doctors;
-import com.fyp.lucapp.databinding.FragmentSingleAppointmentBinding;
+import com.fyp.lucapp.Interface.InterfaceDoctorList;
+import com.fyp.lucapp.R;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Doctors}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class DoctorListAdapterView extends RecyclerView.Adapter<DoctorListAdapterView.ViewHolder> {
+public class DoctorListAdapterView extends RecyclerView.Adapter<DoctorListAdapterView.DoctorListViewHolder> {
 
     private List<Doctors> doctorsList;
-    private AdapterInterface adapterInterface;
+    private InterfaceDoctorList doctorListInterface;
 
     public DoctorListAdapterView() {
 
     }
 
     public DoctorListAdapterView(List<Doctors> items
-            , AdapterInterface adapterInterface) {
+            , InterfaceDoctorList doctorListInterface) {
         doctorsList = items;
-        this.adapterInterface = adapterInterface;
+        this.doctorListInterface = doctorListInterface;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(FragmentSingleAppointmentBinding.inflate(LayoutInflater.from(parent.getContext()),
-                parent, false), adapterInterface);
+    @NonNull
+    public DoctorListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_doctor_list, parent, false);
+        return new DoctorListViewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        if (doctorsList == null) {
-            return;
-        }
-        holder.name.setText(doctorsList.get(position).getUsername());
-        holder.speciality.setText(doctorsList.get(position).getSpeciality());
-        String doctorImageBase64 = doctorsList.get(position).getImage();
-        Bitmap doctorImageBitmap = Helper.convertBase64ToBitmap(doctorImageBase64);
-        holder.image.setImageBitmap(doctorImageBitmap);
+    public void onBindViewHolder(@NonNull DoctorListAdapterView.DoctorListViewHolder holder,
+                                 int position) {
+        Doctors doctors = doctorsList.get(position);
+
+        holder.componentDoctorList.setDoctorName(doctors.getUsername());
+        holder.componentDoctorList.setDoctorSpeciality(doctors.getSpeciality());
+
+        String doctorBase64Image = doctors.getImage();
+        Bitmap doctorImageBitmap = Helper.convertBase64ToBitmap(doctorBase64Image);
+        holder.componentDoctorList.setDoctorImage(doctorImageBitmap);
+        holder.componentDoctorList.setDoctorExperience("(" + doctors.
+                getYearsOfExperience() + " Years)");
+        holder.componentDoctorList.setDoctorPhone(doctors.getPhone());
+        holder.componentDoctorList.setDoctorEmail(doctors.getEmail());
+
+        holder.componentDoctorList.setOnClickListener(v -> doctorListInterface.
+                onDoctorItemClicked(position));
 
     }
 
@@ -65,27 +74,14 @@ public class DoctorListAdapterView extends RecyclerView.Adapter<DoctorListAdapte
 
     }
 
+    public static class DoctorListViewHolder extends RecyclerView.ViewHolder {
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public final ImageView image;
-        public final TextView name;
-        public final TextView speciality;
-        public final AdapterInterface adapterInterface;
 
-        public ViewHolder(FragmentSingleAppointmentBinding binding,
-                          AdapterInterface adapterInterface) {
-            super(binding.getRoot());
-            this.image = binding.docImage;
-            this.name = binding.doctorName;
-            this.speciality = binding.speciality;
-            this.adapterInterface = adapterInterface;
-            itemView.setOnClickListener(this);
-        }
+        private final ComponentDoctorList componentDoctorList;
 
-        @Override
-        public void onClick(View view) {
-            adapterInterface.onClick(view, getAdapterPosition());
-
+        public DoctorListViewHolder(@NonNull View itemView) {
+            super(itemView);
+            componentDoctorList = itemView.findViewById(R.id.component_doctor_list);
         }
     }
 

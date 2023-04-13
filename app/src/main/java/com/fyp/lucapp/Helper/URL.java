@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 public class URL {
     public static String LOGGED_IN_PATIENT_ID = "";
-    public static String IP = "192.168.1.166:8000";
+    public static String IP = "192.168.1.65:8000";
     public final String PATIENT_LOGIN = "http://" + IP + "/patient/login";
     public final String PATIENT_REGISTER = "http://" + IP + "/patient/signup";
     public final String GET_DOCTORS = "http://" + IP + "/doctor/get-doctors";
@@ -175,8 +175,8 @@ public class URL {
             }
         }, error -> {
             //get status code from error
-            String statusCode = String.valueOf(error.networkResponse.statusCode);
-            System.out.println("Error: " + statusCode);
+//            String statusCode = String.valueOf(error.networkResponse.statusCode);
+//            System.out.println("Error: " + statusCode);
             apiCallBack.onError(error);
 
 

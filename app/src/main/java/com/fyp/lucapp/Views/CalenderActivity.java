@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fyp.lucapp.Components.CustomDialogue;
+import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.BasicModels.Appointment;
 import com.fyp.lucapp.BasicModels.CustomDate;
 import com.fyp.lucapp.BasicModels.Data;
@@ -31,7 +31,7 @@ public class CalenderActivity extends AppCompatActivity implements View.OnClickL
     private CustomDate selectedDate;
     private Time selectedTime;
 
-    private CustomDialogue customDialogue;
+    private ComponentCustomDialogue componentCustomDialogue;
 
 
     @Override
@@ -83,10 +83,10 @@ public class CalenderActivity extends AppCompatActivity implements View.OnClickL
 
             //check if the selected date is passed or not
             if (!isSelectedDateValid()) {
-                customDialogue = new CustomDialogue(this,
+                componentCustomDialogue = new ComponentCustomDialogue(this,
                         "Invalid Date", "Date is passed, please select a valid date",
                         R.raw.cancel_animation);
-                customDialogue.onShow();
+                componentCustomDialogue.onShow();
                 return;
             }
 
@@ -96,10 +96,10 @@ public class CalenderActivity extends AppCompatActivity implements View.OnClickL
             }
 
             if (!isSelectedTimeValid()) {
-                customDialogue = new CustomDialogue(this,
+                componentCustomDialogue = new ComponentCustomDialogue(this,
                         "Invalid Time", "Time is passed, please select a valid time",
                         R.raw.cancel_animation);
-                customDialogue.onShow();
+                componentCustomDialogue.onShow();
                 return;
             }
 
@@ -197,7 +197,7 @@ public class CalenderActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         System.out.println("Clicked");
-        customDialogue.onDismiss();
+        componentCustomDialogue.onDismiss();
 
     }
 

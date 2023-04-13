@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fyp.lucapp.Components.CustomDialogue;
+import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.LoginCallback;
 import com.fyp.lucapp.Main;
@@ -155,10 +155,10 @@ public class LoginActivity extends AppCompatActivity implements LoginCallback {
 
     @Override
     public void onError(Object message) {
-        CustomDialogue customDialogue = new CustomDialogue(this,
+        ComponentCustomDialogue componentCustomDialogue = new ComponentCustomDialogue(this,
                 "Invalid request", message.toString(),
                 R.raw.cancel_animation);
-        customDialogue.onShow();
+        componentCustomDialogue.onShow();
 
     }
 }

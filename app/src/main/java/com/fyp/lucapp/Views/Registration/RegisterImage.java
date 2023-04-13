@@ -13,8 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.airbnb.lottie.LottieAnimationView;
-import com.fyp.lucapp.Components.CustomDialogue;
+import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.RegisterCallback;
@@ -86,10 +85,10 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
 
 
             if (selectedImage == null) {
-                CustomDialogue customDialogue = new CustomDialogue(this,
+                ComponentCustomDialogue componentCustomDialogue = new ComponentCustomDialogue(this,
                         "Image Alert!", "Please upload an image before proceeding",
                         R.raw.cancel_animation);
-                customDialogue.onShow();
+                componentCustomDialogue.onShow();
             } else {
                 String base64 = Helper.convertBitmapToBase64(selectedImage);
                 int age = Integer.parseInt(this.age.getText().toString());
@@ -155,10 +154,10 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
                     userImage.setImageBitmap(selectedImage);
 
                 } else {
-                    CustomDialogue customDialogue = new
-                            CustomDialogue(this, "Error", "Please select an image"
+                    ComponentCustomDialogue componentCustomDialogue = new
+                            ComponentCustomDialogue(this, "Error", "Please select an image"
                             , R.raw.cancel_animation);
-                    customDialogue.onShow();
+                    componentCustomDialogue.onShow();
                 }
             }
         }
@@ -181,10 +180,10 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
     @Override
     public void onError(Object message) {
 
-        CustomDialogue customDialogue = new
-                CustomDialogue(this, "Error", message.toString()
+        ComponentCustomDialogue componentCustomDialogue = new
+                ComponentCustomDialogue(this, "Error", message.toString()
                 , R.raw.cancel_animation);
-        customDialogue.onShow();
+        componentCustomDialogue.onShow();
 
     }
 

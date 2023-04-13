@@ -29,19 +29,42 @@
     </LinearLayout>
 
 
-
-
-
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/doctorRecyclerView"
-        android:name="com.fyp.lucapp.ItemFragment"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/poppins_light"
+        android:text="@string/doctors"
+        android:textSize="20sp" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".Fragments.DoctorListFragment"
-        tools:listitem="@layout/fragment_single_appointment" />
+        tools:context=".DoctorListFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/doctorRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <com.fyp.lucapp.Components.ComponentLoader
+            android:id="@+id/component_loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 
 </LinearLayout>

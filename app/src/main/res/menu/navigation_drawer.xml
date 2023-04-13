@@ -11,6 +11,11 @@
         <!--            android:icon="@drawable/medication_notification"-->
         <!--            android:title="Dashboard" />-->
 
+
+<!--        <item-->
+<!--            android:id="@+id/nav_home"-->
+<!--            android:icon="@drawable/home"-->
+<!--            android:title="Home" />-->
         <item
             android:id="@+id/nav_medication"
             android:icon="@drawable/medication_notification"

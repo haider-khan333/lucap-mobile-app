@@ -1,32 +1,38 @@
 package com.fyp.lucapp.Components;
 
 import android.content.Context;
-import android.text.Layout;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.fyp.lucapp.R;
 import com.google.android.material.card.MaterialCardView;
 
-public class MainCard extends MaterialCardView {
-    private MaterialCardView cardView;
+public class ComponentMainCard extends MaterialCardView {
     private TextView heading;
     private TextView subHeading;
-    private Button button;
+    private TextView button;
     private ImageView imageView;
 
-    public MainCard(Context context) {
+
+    public ComponentMainCard(Context context) {
         super(context);
-        init()  ;
+        init();
     }
+
+    public ComponentMainCard(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
 
     public void init() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.main_card, this,
                 true);
-        cardView = view.findViewById(R.id.mainCard);
         heading = view.findViewById(R.id.heading);
         subHeading = view.findViewById(R.id.subHeading);
         button = view.findViewById(R.id.button);
@@ -46,15 +52,9 @@ public class MainCard extends MaterialCardView {
     }
 
     public void setImageView(int imageView) {
-        this.imageView.setImageResource(imageView);
+        this.imageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), imageView,
+                null));
     }
-
-
-    public void setOnClickListener(View.OnClickListener listener) {
-        cardView.setOnClickListener(listener);
-    }
-
-
 
 
 }

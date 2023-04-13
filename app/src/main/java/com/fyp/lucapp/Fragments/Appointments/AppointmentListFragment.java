@@ -14,7 +14,7 @@ import com.fyp.lucapp.R;
 import com.fyp.lucapp.databinding.ReportCardViewBinding;
 import com.google.android.material.tabs.TabLayout;
 
-public class AppointmentListFragment extends Fragment implements AdapterInterface {
+public class AppointmentListFragment extends Fragment {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -44,15 +44,5 @@ public class AppointmentListFragment extends Fragment implements AdapterInterfac
         tabLayout.setupWithViewPager(viewPager);
 
         return view;
-    }
-
-    @Override
-    public void onDownloadClicked(ReportCardViewBinding binding, int position) {
-
-    }
-
-    @Override
-    public void onClick(View view, int position) {
-
     }
 }

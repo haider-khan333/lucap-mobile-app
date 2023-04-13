@@ -5,18 +5,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.fyp.lucapp.Helper.Status;
 import com.fyp.lucapp.R;
 
-public class CustomDialogue extends AlertDialog {
+public class ComponentCustomDialogue extends AlertDialog {
 
     private TextView mainHeading;
     private TextView message;
@@ -26,7 +22,7 @@ public class CustomDialogue extends AlertDialog {
     private AlertDialog alertDialog;
 
 
-    public CustomDialogue(Context context, String mainHeading, String message, int animation) {
+    public ComponentCustomDialogue(Context context, String mainHeading, String message, int animation) {
         super(context);
         init(mainHeading, message, animation);
 

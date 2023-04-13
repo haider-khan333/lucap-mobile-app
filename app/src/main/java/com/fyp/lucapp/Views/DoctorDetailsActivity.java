@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.fyp.lucapp.BasicModels.Doctors;
 import com.fyp.lucapp.BasicModels.WorkTime;
-import com.fyp.lucapp.Components.CustomDialogue;
+import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.ApiCallBack;
@@ -236,9 +236,9 @@ public class DoctorDetailsActivity extends AppCompatActivity implements ApiCallB
 
     @Override
     public void onError(Object message) {
-        CustomDialogue customDialogue = new CustomDialogue(this, "Error",
+        ComponentCustomDialogue componentCustomDialogue = new ComponentCustomDialogue(this, "Error",
                 message.toString(), R.raw.cancel_animation);
-        customDialogue.onShow();
+        componentCustomDialogue.onShow();
 
     }
 
@@ -252,9 +252,9 @@ public class DoctorDetailsActivity extends AppCompatActivity implements ApiCallB
 
     @Override
     public void onFailure(Object message) {
-        CustomDialogue customDialogue = new CustomDialogue(this, "Error",
+        ComponentCustomDialogue componentCustomDialogue = new ComponentCustomDialogue(this, "Error",
                 message.toString(), R.raw.cancel_animation);
-        customDialogue.onShow();
+        componentCustomDialogue.onShow();
     }
 }
 

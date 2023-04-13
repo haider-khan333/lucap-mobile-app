@@ -70,6 +70,9 @@ public class Helper {
                 doctors.setUsername(docList.getJSONObject(i).getString("username"));
                 doctors.setImage(docList.getJSONObject(i).getString("image"));
                 doctors.setSpeciality(docList.getJSONObject(i).getString("speciality"));
+                doctors.setYearsOfExperience(docList.getJSONObject(i).getInt("years_of_experience"));
+                doctors.setEmail(docList.getJSONObject(i).getString("email"));
+                doctors.setPhone(docList.getJSONObject(i).getString("phone"));
                 doctorsArrayList.add(doctors);
             }
         } catch (Exception e) {
