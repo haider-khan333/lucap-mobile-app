@@ -65,7 +65,7 @@ public class ReportFragment extends Fragment implements InterfaceApi, InterfaceC
         url = new URL(getContext(), this);
         recyclerView = view.findViewById(R.id.reportRecyclerView);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        componentLoader = view.findViewById(R.id.component_loader);
+        componentLoader = view.findViewById(R.id.fpComponentLoader);
 
         ReportsAdapterView reportsAdapterView = new ReportsAdapterView();
         recyclerView.setAdapter(reportsAdapterView);

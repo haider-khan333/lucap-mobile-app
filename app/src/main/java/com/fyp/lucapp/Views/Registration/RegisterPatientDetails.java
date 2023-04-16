@@ -10,10 +10,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fyp.lucapp.Components.ComponentCustomDialogue;
-import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.R;
 
-public class RegistrationActivity extends AppCompatActivity {
+public class RegisterPatientDetails extends AppCompatActivity {
 
     private TextView txtFirstName;
     private TextView txtLastName;
@@ -32,7 +31,7 @@ public class RegistrationActivity extends AppCompatActivity {
         //Initialize
         txtFirstName = findViewById(R.id.firstName);
         txtLastName = findViewById(R.id.lastName);
-        txtEmail = findViewById(R.id.email);
+        txtEmail = findViewById(R.id.fpEmail);
         txtPassword = findViewById(R.id.password);
         txtConfirmPassword = findViewById(R.id.confirmPassword);
         nextBtn = findViewById(R.id.nextButton);
@@ -73,7 +72,7 @@ public class RegistrationActivity extends AppCompatActivity {
             } else if (txtPassword.getText().toString().
                     equals(txtConfirmPassword.getText().toString())) {
 
-                Intent intent = new Intent(this, RegisterPatient.class);
+                Intent intent = new Intent(this, RegisterPatientContact.class);
                 intent.putExtra("firstName", txtFirstName.getText().toString());
                 intent.putExtra("lastName", txtLastName.getText().toString());
                 intent.putExtra("email", txtEmail.getText().toString());

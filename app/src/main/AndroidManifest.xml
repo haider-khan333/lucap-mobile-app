@@ -9,6 +9,11 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
+
 
 
     <application
@@ -36,28 +41,48 @@
             android:parentActivityName=".Views.LoginActivity" />
 
         <activity
-            android:name=".Views.Registration.RegistrationActivity"
+            android:name=".Views.Registration.RegisterPatientDetails"
             android:parentActivityName=".Views.LoginActivity" />
 
         <activity
-            android:name=".Views.Registration.RegisterPatient"
-            android:parentActivityName=".Views.Registration.RegistrationActivity" />
+            android:name=".Views.Registration.RegisterPatientContact"
+            android:parentActivityName=".Views.Registration.RegisterPatientDetails" />
 
         <activity
-            android:name=".Views.Registration.RegisterImage"
-            android:parentActivityName=".Views.Registration.RegistrationActivity" />
+            android:name=".Views.Registration.RegisterPatientImage"
+            android:parentActivityName=".Views.Registration.RegisterPatientDetails" />
+
+        <activity
+            android:name=".Views.ForgetPassword.FPEnterCode"
+            android:parentActivityName=".Views.ForgetPassword.FPEnterEmail" />
+
+        <activity
+            android:name=".Views.ForgetPassword.FPEnterEmail"
+            android:parentActivityName=".Views.LoginActivity" />
+
+<!--        <activity-->
+<!--            android:name=".Views.LoginActivity"-->
+<!--            android:parentActivityName=".Views.SplashActivity" />-->
+
 
 
         <activity
             android:name=".Views.LoginActivity"
-
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+<!--        <activity-->
+<!--            android:name=".Views.SplashActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
         <receiver android:name=".Helper.AlarmReceiver" />
 

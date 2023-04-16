@@ -12,15 +12,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="273dp"
-            android:background="@drawable/blue_bg"
-            >
-
-<!--            <ImageView-->
-            <!--                android:layout_width="200dp"-->
-            <!--                android:layout_height="200dp"-->
-            <!--                android:scaleType="centerCrop"-->
-            <!--                android:layout_gravity="center"-->
-            <!--                android:src="@mipmap/second_app_logo_foreground" />-->
+            android:background="@drawable/blue_bg">
 
 
         </FrameLayout>
@@ -32,10 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:fontFamily="@font/poppins_semibold"
+        android:fontFamily="@font/poppins_light"
         android:gravity="start"
         android:padding="5dp"
-        android:text="@string/login_to_your_account"
+        android:text="@string/enter_registered_email"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -48,7 +40,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/lgEmail"
+            android:id="@+id/fpEmail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
@@ -61,43 +53,6 @@
             android:padding="10dp"
             android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/lgPassword"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@xml/edit_text"
-            android:drawableEnd="@xml/password_foreground"
-            android:hint="@string/password"
-            android:importantForAutofill="no"
-            android:inputType="textPassword"
-            android:padding="10dp"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/lgRegisterLink"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="5dp"
-            android:fontFamily="@font/poppins_light"
-            android:text="@string/register_link"
-            android:textColor="@color/gray"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/lgForgetPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="5dp"
-            android:fontFamily="@font/poppins_light"
-            android:text="@string/forgot_the_password"
-            android:textColor="@color/gray"
-            android:textSize="18sp" />
-
-
     </LinearLayout>
 
     <FrameLayout
@@ -106,14 +61,14 @@
         android:gravity="bottom">
 
         <com.fyp.lucapp.Components.ComponentLoader
-            android:id="@+id/lgComponentLoader"
+            android:id="@+id/fpComponentLoader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/login"
+            android:id="@+id/fpNext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -122,7 +77,7 @@
             android:drawableEnd="@drawable/right_arrow_foreground"
             android:fontFamily="@font/poppins_semibold"
             android:gravity="start|center_vertical"
-            android:text="@string/login"
+            android:text="@string/next"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="18sp" />

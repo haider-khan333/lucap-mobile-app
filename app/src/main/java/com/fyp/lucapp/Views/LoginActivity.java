@@ -1,6 +1,7 @@
 package com.fyp.lucapp.Views;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,7 +19,8 @@ import com.fyp.lucapp.Interface.LoginCallback;
 import com.fyp.lucapp.Main;
 import com.fyp.lucapp.R;
 import com.fyp.lucapp.Schemas.LoginSchema;
-import com.fyp.lucapp.Views.Registration.RegistrationActivity;
+import com.fyp.lucapp.Views.ForgetPassword.FPEnterEmail;
+import com.fyp.lucapp.Views.Registration.RegisterPatientDetails;
 
 public class LoginActivity extends AppCompatActivity implements LoginCallback {
     private TextView txtEmail;
@@ -34,12 +36,13 @@ public class LoginActivity extends AppCompatActivity implements LoginCallback {
         setContentView(R.layout.activity_login);
 
         //Initialize
-        txtEmail = findViewById(R.id.email);
-        txtPassword = findViewById(R.id.password);
+        txtEmail = findViewById(R.id.lgEmail);
+        txtPassword = findViewById(R.id.lgPassword);
         btnLogin = findViewById(R.id.login);
-        componentLoader = findViewById(R.id.component_loader);
+        componentLoader = findViewById(R.id.lgComponentLoader);
 
-        TextView txtRegister = findViewById(R.id.registerLink);
+        TextView txtRegister = findViewById(R.id.lgRegisterLink);
+        TextView txtForgetPassword = findViewById(R.id.lgForgetPassword);
 
 
         btnLogin.setEnabled(false);
@@ -71,9 +74,14 @@ public class LoginActivity extends AppCompatActivity implements LoginCallback {
 
         });
 
+        txtForgetPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, FPEnterEmail.class);
+            startActivity(intent);
+        });
+
         txtRegister.setOnClickListener(v -> {
             //if the user clicks on the register link, then go to the registration activity
-            startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+            startActivity(new Intent(LoginActivity.this, RegisterPatientDetails.class));
 
         });
 
@@ -96,9 +104,17 @@ public class LoginActivity extends AppCompatActivity implements LoginCallback {
 
     @Override
     public void onSuccess() {
-        btnLogin.setEnabled(true);
+//        btnLogin.setEnabled(true);
         LoaderUtils.hideLoader(componentLoader);
         Intent intent = new Intent(LoginActivity.this, Main.class);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetail", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        System.out.println("userID (logged in): " + URL.LOGGED_IN_PATIENT_ID);
+        editor.putString("userID", URL.LOGGED_IN_PATIENT_ID);
+        editor.apply();
+
+
         startActivity(intent);
         this.finish();
     }

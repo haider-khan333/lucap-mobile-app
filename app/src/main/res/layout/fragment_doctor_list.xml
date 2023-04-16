@@ -66,7 +66,7 @@
 
 
         <com.fyp.lucapp.Components.ComponentLoader
-            android:id="@+id/component_loader"
+            android:id="@+id/fpComponentLoader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

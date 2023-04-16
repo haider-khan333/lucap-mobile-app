@@ -1,6 +1,8 @@
 package com.fyp.lucapp.BasicModels;
 
-public class Patient {
+import java.io.Serializable;
+
+public class Patient implements Serializable {
 
     private String patientId;
     private String patientName;
@@ -10,6 +12,8 @@ public class Patient {
     private String patientImage;
     private int patientAge;
     private String patientGender;
+
+    public Patient(){}
 
     public Patient(String patientId, String patientName, String patientEmail, String password,
                    String patientContact,

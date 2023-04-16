@@ -25,13 +25,12 @@ import com.fyp.lucapp.Views.LoginActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RegisterImage extends AppCompatActivity implements RegisterCallback {
+public class RegisterPatientImage extends AppCompatActivity implements RegisterCallback {
 
     private final int SELECT_PICTURE = 200;
     private Bitmap selectedImage;
     private ComponentLoader componentLoader;
     private TextView age;
-
     private URL url;
 
     private CircleImageView userImage;
@@ -56,7 +55,7 @@ public class RegisterImage extends AppCompatActivity implements RegisterCallback
         Button uploadButton = findViewById(R.id.uploadButton);
         nextButton = findViewById(R.id.nextButton);
         userImage = findViewById(R.id.userImage);
-        componentLoader = findViewById(R.id.component_loader);
+        componentLoader = findViewById(R.id.fpComponentLoader);
         age = findViewById(R.id.age);
 
         nextButton.setEnabled(false);

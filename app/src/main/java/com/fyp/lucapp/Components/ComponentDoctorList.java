@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.fyp.lucapp.R;
 
@@ -40,14 +39,14 @@ public class ComponentDoctorList extends LinearLayout {
     }
 
     public void init() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.component_doctor_list, this,
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.component_doctor_card, this,
                 true);
         doctorImage = view.findViewById(R.id.docImage);
         doctorName = view.findViewById(R.id.doctorName);
         doctorExperience = view.findViewById(R.id.experience);
         doctorSpeciality = view.findViewById(R.id.speciality);
         doctorPhone = view.findViewById(R.id.phone);
-        doctorEmail = view.findViewById(R.id.email);
+        doctorEmail = view.findViewById(R.id.fpEmail);
     }
 
     public void setDoctorImage(Bitmap doctorBitmap) {

@@ -19,6 +19,7 @@ public class ComponentMainCard extends MaterialCardView {
     private ImageView imageView;
 
 
+
     public ComponentMainCard(Context context) {
         super(context);
         init();

@@ -52,7 +52,7 @@ public class DoctorsFragment extends Fragment implements InterfaceClickItem, Int
         View view = inflater.inflate(R.layout.fragment_doctor_list, container, false);
 
         url = new URL(getContext(), this);
-        componentLoader = view.findViewById(R.id.component_loader);
+        componentLoader = view.findViewById(R.id.fpComponentLoader);
         recyclerView = view.findViewById(R.id.doctorRecyclerView);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
 

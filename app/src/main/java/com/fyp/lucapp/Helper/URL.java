@@ -12,8 +12,10 @@ import com.fyp.lucapp.Interface.LoginCallback;
 import com.fyp.lucapp.Interface.OnClickSubmit;
 import com.fyp.lucapp.Interface.RegisterCallback;
 import com.fyp.lucapp.Schemas.AppointmentSchema;
+import com.fyp.lucapp.Schemas.GetPatientSchema;
 import com.fyp.lucapp.Schemas.LoginSchema;
 import com.fyp.lucapp.Schemas.RegisterPatientSchema;
+import com.fyp.lucapp.Schemas.SendMailSchema;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,11 +28,16 @@ public class URL {
     public final String PATIENT_LOGIN = "http://" + IP + "/patient/login";
     public final String PATIENT_REGISTER = "http://" + IP + "/patient/signup";
     public final String GET_DOCTORS = "http://" + IP + "/doctor/get-doctors";
+
+    public final String GET_PATIENT = "http://" + IP + "/patient/get-patient";
     public final String GET_REPORTS = "http://" + IP + "/report/get-report";
 
     public final String GET_APPOINTMENTS = "http://" + IP + "/patient/getappointments";
-
     public final String ADD_APPOINTMENT = "http://" + IP + "/doctors/addappointment";
+
+    public final String SEND_MAIL = "http://" + IP + "/mail/send-mail";
+
+    public final String GET_MEDICINES = "http://" + IP + "/patient/get-medicines";
     public Context context;
     public LoginCallback loginCallback;
     public RegisterCallback registerCallback;
@@ -59,6 +66,65 @@ public class URL {
     public URL(Context context, OnClickSubmit onClick) {
         this.context = context;
         this.onClickSubmit = onClick;
+    }
+
+
+    public void sendMail(SendMailSchema sendMailSchema) {
+        RequestQueue requestQueue = Volley.
+                newRequestQueue(context);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("from_email", sendMailSchema.getFromEmail());
+            jsonObject.put("to_email", sendMailSchema.getToEmail());
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                SEND_MAIL,
+                jsonObject, response -> {
+            try {
+                int statusCode = response.optInt("status_code");
+                if (statusCode == 202) {
+                    int code = response.optInt("code");
+                    interfaceApi.onSuccess(code);
+                } else {
+                    interfaceApi.onError("Error sending mail");
+                }
+
+            } catch
+            (Exception e) {
+                e.printStackTrace();
+                interfaceApi.onError(e.toString());
+            }
+        }, error -> {
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceApi.onError("Error sending mail");
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceApi.onError(errorMessage);
+            }
+        });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
+
     }
 
 
@@ -281,10 +347,25 @@ public class URL {
                 interfaceApi.onError(e.toString());
             }
         }, error -> {
-            //get status code from error
-            String statusCode = String.valueOf(error.networkResponse.statusCode);
-            System.out.println("Error: " + statusCode);
-            interfaceApi.onError(error);
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceApi.onError("No appointments found");
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceApi.onError(errorMessage);
+            }
 
         });
 
@@ -324,11 +405,25 @@ public class URL {
                 onClickSubmit.onFailure(e.toString());
             }
         }, error -> {
-            //get status code from error
-            String statusCode = String.valueOf(error.networkResponse.statusCode);
-            System.out.println("Error: " + statusCode);
-            System.out.println("Error: " + error);
-            onClickSubmit.onFailure(error);
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceApi.onError(error);
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceApi.onError(errorMessage);
+            }
 
         });
 
@@ -337,4 +432,116 @@ public class URL {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
     }
+
+
+    public void getMedicines() {
+        RequestQueue requestQueue = Volley.
+                newRequestQueue(context);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                GET_MEDICINES + "/" + URL.LOGGED_IN_PATIENT_ID,
+                null, response -> {
+            try {
+                int statusCode = response.optInt("status_code");
+                if (statusCode == 200) {
+                    JSONArray medicinesJsonList = response.getJSONArray("medicine_list");
+                    interfaceApi.onSuccess(medicinesJsonList);
+                } else {
+                    interfaceApi.onError("No medicines found");
+                }
+            } catch
+            (Exception e) {
+                e.printStackTrace();
+                interfaceApi.onError(e.toString());
+            }
+        }, error -> {
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceApi.onError("No medicine found");
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceApi.onError(errorMessage);
+            }
+
+        });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public void getPatient(GetPatientSchema getPatientSchema) {
+        RequestQueue requestQueue = Volley.
+                newRequestQueue(context);
+
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("patient_email", getPatientSchema.getEmail());
+            System.out.println(jsonObject);
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                GET_PATIENT,
+                jsonObject, response -> {
+            try {
+                int statusCode = response.optInt("status_code");
+                if (statusCode == 200) {
+                    JSONObject patientObject = response.optJSONObject("patient");
+                    interfaceApi.onSuccess(patientObject);
+                } else {
+                    interfaceApi.onError("Email not found");
+                }
+            } catch
+            (Exception e) {
+                e.printStackTrace();
+                interfaceApi.onError(e.toString());
+            }
+        }, error -> {
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceApi.onError("Email not found");
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceApi.onError(errorMessage);
+            }
+
+        });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
+
 }

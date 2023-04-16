@@ -11,10 +11,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fyp.lucapp.Interface.RegisterCallback;
 import com.fyp.lucapp.R;
 
-public class RegisterPatient extends AppCompatActivity {
+public class RegisterPatientContact extends AppCompatActivity {
 
     private Button nextBtn;
 
@@ -51,7 +50,6 @@ public class RegisterPatient extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 checkNextButtonState();
             }
 
@@ -74,7 +72,7 @@ public class RegisterPatient extends AppCompatActivity {
                 String contact = txtContactNumber.getText().toString();
                 String gender = radioButton.getText().toString();
 
-                Intent nextIntent = new Intent(this, RegisterImage.class);
+                Intent nextIntent = new Intent(this, RegisterPatientImage.class);
                 nextIntent.putExtra("firstName", firstName);
                 nextIntent.putExtra("lastName", lastName);
                 nextIntent.putExtra("email", email);
@@ -91,10 +89,12 @@ public class RegisterPatient extends AppCompatActivity {
     }
 
     private void checkNextButtonState() {
-        boolean isTextEmpty = txtContactNumber.getText().toString().isEmpty();
-        boolean isNumberValid = txtContactNumber.getText().toString().length() == 11;
+        String contactNumber = txtContactNumber.getText().toString();
+        boolean isTextEmpty = contactNumber.isEmpty();
+        boolean isNumberValid = contactNumber.matches("^03\\d{9}$");
         boolean isRadioGroupEmpty = radioGroup.getCheckedRadioButtonId() == -1;
         nextBtn.setEnabled(!isTextEmpty && !isRadioGroupEmpty && isNumberValid);
+
     }
 
 }

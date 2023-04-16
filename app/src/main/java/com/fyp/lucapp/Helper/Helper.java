@@ -1,20 +1,17 @@
 package com.fyp.lucapp.Helper;
 
 import android.graphics.Bitmap;
-import android.graphics.pdf.PdfDocument;
 
 import com.fyp.lucapp.BasicModels.Data;
 import com.fyp.lucapp.BasicModels.DoctorsData;
 import com.fyp.lucapp.BasicModels.Medications;
+import com.fyp.lucapp.BasicModels.Patient;
 import com.fyp.lucapp.BasicModels.ReportData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,6 +159,63 @@ public class Helper {
 
         return reportDataArrayList;
 
+    }
+
+    public static ArrayList<Medications> getMedicines(JSONArray medicineList) {
+        ArrayList<Medications> medicationsArrayList = new ArrayList<>();
+        try {
+            for (int i = 0; i < medicineList.length(); i++) {
+                Medications medications = new Medications();
+                medications.setMedicineName(medicineList.getJSONObject(i).optString("medicine_name"));
+                medications.setMedicineGrams(medicineList.getJSONObject(i).optString("medicine_grams"));
+                medications.setMedicineDosage(medicineList.getJSONObject(i).optString("medicine_dosage"));
+                medications.setMedicineFrequency(medicineList.getJSONObject(i).optString("medicine_frequency"));
+                medicationsArrayList.add(medications);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return medicationsArrayList;
+    }
+
+    public static Patient getPatient(JSONObject patientObject) {
+        Patient patient = new Patient();
+        try {
+            patient.setPatientId(String.valueOf(patientObject.optInt("id")));
+            patient.setPatientName(patientObject.optString("username"));
+            patient.setPatientEmail(patientObject.optString("email"));
+            patient.setPatientContact(patientObject.optString("phone"));
+            patient.setPatientAge(patientObject.optInt("age"));
+            patient.setPatientPassword(patientObject.optString("password"));
+            patient.setPatientGender(patientObject.optString("gender"));
+        } catch
+        (Exception e) {
+            System.out.println(e);
+        }
+
+
+        return patient;
+    }
+
+    public static String convertEmailToAsterisks(String email) {
+        if (email == null || !email.contains("@")) {
+            return null;
+        }
+
+        String[] parts = email.split("@");
+        String localPart = parts[0];
+        String domain = parts[1];
+
+        StringBuilder maskedLocalPart = new StringBuilder();
+        for (int i = 0; i < localPart.length(); i++) {
+            if (i != localPart.charAt(0)) {
+                maskedLocalPart.append("*");
+            }
+
+        }
+
+        return maskedLocalPart + "@" + domain;
     }
 
 

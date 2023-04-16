@@ -9,10 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
 import com.fyp.lucapp.R;
-import com.google.android.material.card.MaterialCardView;
 
 public class ComponentReport extends LinearLayout {
 
@@ -36,7 +34,7 @@ public class ComponentReport extends LinearLayout {
     }
 
     private void init() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.component_report,
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.component_report_card,
                 this, true);
         date = view.findViewById(R.id.reportDate);
         doctorDetails = view.findViewById(R.id.doctorDetails);
