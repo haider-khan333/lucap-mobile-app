@@ -11,18 +11,22 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.fyp.lucapp.BasicModels.Patient;
 import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Components.ComponentLoader;
+import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.LoaderUtils;
 import com.fyp.lucapp.Helper.URL;
-import com.fyp.lucapp.Interface.LoginCallback;
+import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.Main;
 import com.fyp.lucapp.R;
 import com.fyp.lucapp.Schemas.LoginSchema;
 import com.fyp.lucapp.Views.ForgetPassword.FPEnterEmail;
 import com.fyp.lucapp.Views.Registration.RegisterPatientDetails;
 
-public class LoginActivity extends AppCompatActivity implements LoginCallback {
+import org.json.JSONObject;
+
+public class LoginActivity extends AppCompatActivity implements InterfaceApi {
     private TextView txtEmail;
     private TextView txtPassword;
     private ComponentLoader componentLoader;
@@ -101,22 +105,28 @@ public class LoginActivity extends AppCompatActivity implements LoginCallback {
         btnLogin.setEnabled(!isEmailEmpty && !isPasswordEmpty && isEmailValid);
     }
 
-
     @Override
-    public void onSuccess() {
-//        btnLogin.setEnabled(true);
+    public void onSuccess(Object object) {
+        JSONObject patientObject = (JSONObject) object;
+        Patient patient = Helper.getPatient(patientObject);
+
         LoaderUtils.hideLoader(componentLoader);
         Intent intent = new Intent(LoginActivity.this, Main.class);
 
         SharedPreferences sharedPreferences = getSharedPreferences("userDetail", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        System.out.println("userID (logged in): " + URL.LOGGED_IN_PATIENT_ID);
-        editor.putString("userID", URL.LOGGED_IN_PATIENT_ID);
+        editor.putString("userID", patient.getPatientId());
+        editor.putString("userName", patient.getPatientName());
+        editor.putString("userEmail", patient.getPatientEmail());
+        editor.putString("userPhone", patient.getPatientContact());
+        editor.putString("userGender", patient.getPatientGender());
+        editor.putString("userImage", patient.getPatientImage());
+        editor.putString("userAge", String.valueOf(patient.getPatientAge()));
         editor.apply();
-
 
         startActivity(intent);
         this.finish();
+
     }
 
     @Override

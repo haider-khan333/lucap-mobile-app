@@ -14,8 +14,6 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
 
-
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -36,9 +34,9 @@
             android:name=".Views.CalenderActivity"
             android:parentActivityName=".Views.DoctorDetailsActivity" />
 
-        <activity
-            android:name=".Main"
-            android:parentActivityName=".Views.LoginActivity" />
+<!--        <activity-->
+<!--            android:name=".Main"-->
+<!--            android:parentActivityName=".Views.LoginActivity" />-->
 
         <activity
             android:name=".Views.Registration.RegisterPatientDetails"
@@ -53,11 +51,10 @@
             android:parentActivityName=".Views.Registration.RegisterPatientDetails" />
 
 
-
+        <!-- ForgetPassword Activities -->
         <activity
             android:name=".Views.ForgetPassword.FPEnterPassword"
             android:parentActivityName=".Views.ForgetPassword.FPEnterCode" />
-
 
         <activity
             android:name=".Views.ForgetPassword.FPEnterCode"
@@ -67,14 +64,19 @@
             android:name=".Views.ForgetPassword.FPEnterEmail"
             android:parentActivityName=".Views.LoginActivity" />
 
-<!--        <activity-->
-<!--            android:name=".Views.LoginActivity"-->
-<!--            android:parentActivityName=".Views.SplashActivity" />-->
 
+        <!-- Settings Activities -->
+        <activity
+            android:name=".Views.Settings.EditProfileActivity"
+            android:parentActivityName=".Main" />
+
+        <!--        <activity-->
+        <!--            android:name=".Views.LoginActivity"-->
+        <!--            android:parentActivityName=".Views.SplashActivity" />-->
 
 
         <activity
-            android:name=".Views.LoginActivity"
+            android:name=".Main"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -82,14 +84,14 @@
             </intent-filter>
         </activity>
 
-<!--        <activity-->
-<!--            android:name=".Views.SplashActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        <!--        <activity-->
+        <!--            android:name=".Views.SplashActivity"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.MAIN" />-->
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
 
         <receiver android:name=".Helper.AlarmReceiver" />
 

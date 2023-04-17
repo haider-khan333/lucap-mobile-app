@@ -1,5 +1,6 @@
 package com.fyp.lucapp.Helper;
 
+import com.fyp.lucapp.BasicModels.Patient;
 import com.fyp.lucapp.BasicModels.SettingsData;
 import com.fyp.lucapp.Strings.Strings;
 
@@ -18,6 +19,8 @@ public class Store {
     public static int SETTINGS_HELP_CENTER_ID = 0;
     public static int SETTINGS_GALLERY_ID = 0;
     public static int SETTINGS_LOGOUT_ID = 0;
+
+    public static Patient LOGGED_IN_PATIENT = null;
 
     public static String EMAIL = "sudowolf786@gmail.com";
 

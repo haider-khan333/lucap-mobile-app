@@ -17,6 +17,7 @@ import com.fyp.lucapp.Schemas.GetPatientSchema;
 import com.fyp.lucapp.Schemas.LoginSchema;
 import com.fyp.lucapp.Schemas.RegisterPatientSchema;
 import com.fyp.lucapp.Schemas.SendMailSchema;
+import com.fyp.lucapp.Schemas.UpdatePatientSchema;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -197,21 +198,26 @@ public class URL {
                 PATIENT_LOGIN,
                 jsonObject, response -> {
             try {
-                URL.LOGGED_IN_PATIENT_ID = response.getString("patient_id");
-                loginCallback.onSuccess();
+                int statusCode = response.optInt("status_code");
+                if (statusCode == 200) {
+                    JSONObject patient = response.getJSONObject("patient");
+                    URL.LOGGED_IN_PATIENT_ID = patient.getString("id");
+                    interfaceApi.onSuccess(patient);
+
+                } else {
+                    interfaceApi.onError("Invalid email or password");
+                }
 
             } catch
             (Exception e) {
                 e.printStackTrace();
-                loginCallback.onError(e.toString());
+                interfaceApi.onError(e.toString());
             }
         }, error -> {
-            System.out.println("Error: " + error);
-
             if (error.networkResponse != null && error.networkResponse.statusCode == 404) {
-                loginCallback.onError("Invalid email or password");
+                interfaceApi.onError("Invalid email or password");
             } else {
-                loginCallback.onError(error.toString());
+                interfaceApi.onError(error.toString());
             }
         });
 
@@ -564,7 +570,7 @@ public class URL {
                     JSONObject patientObject = response.optJSONObject("patient");
                     interfaceApi.onSuccess(patientObject);
                 } else {
-                    interfaceApi.onError("Email not found");
+                    interfaceApi.onError("Patient not found");
                 }
             } catch
             (Exception e) {
@@ -574,7 +580,7 @@ public class URL {
         }, error -> {
             int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
             if (statusCode == 404) {
-                interfaceApi.onError("Email not found");
+                interfaceApi.onError("Patient not found");
             } else {
                 String errorMessage = "Error: " + statusCode;
                 if (error.networkResponse != null && error.networkResponse.data != null) {
@@ -599,6 +605,68 @@ public class URL {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
 
+    }
+
+    public void updatePatient(UpdatePatientSchema updatePatientSchema) {
+        RequestQueue requestQueue = Volley.
+                newRequestQueue(context);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("patient_name", updatePatientSchema.getUserName());
+            jsonObject.put("patient_phone", updatePatientSchema.getPhoneNumber());
+            jsonObject.put("patient_age", updatePatientSchema.getAge());
+            jsonObject.put("patient_image", updatePatientSchema.getImage());
+
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        String UPDATE_PATIENT = IP + "/patient/update-appointments";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT,
+                UPDATE_PATIENT + "/" + URL.LOGGED_IN_PATIENT_ID,
+                jsonObject, response -> {
+            try {
+                int statusCode = response.optInt("status_code");
+                if (statusCode == 200) {
+                    JSONArray appointmentsJsonList = response.getJSONArray("appointment_list");
+                    interfaceApi.onSuccess(appointmentsJsonList);
+                } else {
+                    interfaceApi.onError("patient not updated");
+                }
+            } catch
+            (Exception e) {
+                e.printStackTrace();
+                interfaceApi.onError(e.toString());
+            }
+        }, error -> {
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceApi.onError("Patient not updated");
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceApi.onError(errorMessage);
+            }
+
+        });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
     }
 
 

@@ -189,6 +189,7 @@ public class Helper {
             patient.setPatientAge(patientObject.optInt("age"));
             patient.setPatientPassword(patientObject.optString("password"));
             patient.setPatientGender(patientObject.optString("gender"));
+            patient.setPatientImage(patientObject.optString("image"));
         } catch
         (Exception e) {
             System.out.println(e);
@@ -217,8 +218,6 @@ public class Helper {
 
         return maskedLocalPart + "@" + domain;
     }
-
-
 
 
 }

@@ -1,5 +1,6 @@
 package com.fyp.lucapp.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.fyp.lucapp.Adapters.SettingsAdapterView;
 import com.fyp.lucapp.BasicModels.SettingsData;
 import com.fyp.lucapp.Helper.Store;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Views.Settings.EditProfileActivity;
 
 import java.util.List;
 
@@ -56,7 +58,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         int id = view.getId();
         System.out.println("id: " + id);
         if (id == Store.SETTINGS_EDIT_PROFILE_ID) {
-            Toast.makeText(getContext(), "Edit Profile", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), EditProfileActivity.class);
+            startActivity(intent);
         } else if (id == Store.SETTINGS_NOTIFICATIONS_ID) {
             Toast.makeText(getContext(), "Notifications", Toast.LENGTH_SHORT).show();
         } else if (id == Store.SETTINGS_APPOINTMENTS_ID) {
