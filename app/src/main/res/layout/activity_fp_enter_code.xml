@@ -40,7 +40,17 @@
         android:fontFamily="@font/poppins_light"
         android:gravity="start"
         android:padding="5dp"
-        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/fpEmailBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/rounded_edittext"
+        android:fontFamily="@font/poppins_light"
+        android:gravity="start"
+        android:padding="10dp"
         android:textSize="15sp" />
 
 
@@ -48,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:padding="10dp"
         android:weightSum="6">
@@ -57,7 +67,7 @@
             android:id="@+id/editText1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext"
             android:contentDescription="@string/verification_code_box"
@@ -71,7 +81,7 @@
             android:id="@+id/editText2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext"
             android:contentDescription="@string/verification_code_box"
@@ -85,7 +95,7 @@
             android:id="@+id/editText3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext"
             android:contentDescription="@string/verification_code_box"
@@ -99,7 +109,7 @@
             android:id="@+id/editText4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext"
             android:contentDescription="@string/verification_code_box"
@@ -113,7 +123,7 @@
             android:id="@+id/editText5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext"
             android:contentDescription="@string/verification_code_box"
@@ -127,7 +137,7 @@
             android:id="@+id/editText6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext"
             android:contentDescription="@string/verification_code_box"
@@ -141,15 +151,13 @@
 
     <TextView
         android:id="@+id/fpResendCode"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="@drawable/list_background"
         android:fontFamily="@font/poppins_light"
-        android:gravity="start"
+        android:gravity="center"
         android:padding="10dp"
-        android:textSize="12sp"
-        android:text="@string/resend_code" />
+        android:textSize="12sp" />
 
     <FrameLayout
         android:layout_width="match_parent"

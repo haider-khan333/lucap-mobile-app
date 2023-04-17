@@ -52,6 +52,13 @@
             android:name=".Views.Registration.RegisterPatientImage"
             android:parentActivityName=".Views.Registration.RegisterPatientDetails" />
 
+
+
+        <activity
+            android:name=".Views.ForgetPassword.FPEnterPassword"
+            android:parentActivityName=".Views.ForgetPassword.FPEnterCode" />
+
+
         <activity
             android:name=".Views.ForgetPassword.FPEnterCode"
             android:parentActivityName=".Views.ForgetPassword.FPEnterEmail" />

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/component_setting"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <ImageView
+        android:id="@+id/settingsIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="0.1"
+        android:padding="5dp" />
+
+    <TextView
+        android:id="@+id/settingsName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.8"
+        android:background="?attr/selectableItemBackground"
+        android:fontFamily="@font/poppins_light"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:src="@drawable/right_arrow_foreground" />
+
+</LinearLayout>
+
+

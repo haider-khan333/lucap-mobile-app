@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    tools:context=".Fragments.SettingsFragment">
+
+
+    <com.fyp.lucapp.Components.ComponentUser
+        android:id="@+id/component_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/medical_blue" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/settingsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="-50dp"
+        android:layout_weight="1"
+        android:background="@drawable/rounded_bg"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="25dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <include
+        layout="@layout/component_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+
+
+</LinearLayout>

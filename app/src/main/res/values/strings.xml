@@ -123,6 +123,10 @@
     <string name="enter_registered_email">Enter Registered Email</string>
     <string name="enter_6_digit_code">Enter 6-Digit Code</string>
     <string name="verification_code_box">Verification Code Box</string>
-    <string name="resend_code">Resend Code</string>
-    <string name="instructions">Enter the 6-digit code sent on your verified email </string>
+    <string name="resend_code">Please enter the OTP sent on your verified email</string>
+    <string name="instructions">Enter the 6-digit OTP sent to </string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="change_password">Change Password</string>
 </resources>

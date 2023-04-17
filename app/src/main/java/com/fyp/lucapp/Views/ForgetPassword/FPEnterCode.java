@@ -1,8 +1,13 @@
 package com.fyp.lucapp.Views.ForgetPassword;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -11,10 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.fyp.lucapp.BasicModels.Patient;
 import com.fyp.lucapp.Components.ComponentCustomDialogue;
-import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.Store;
 import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.InterfaceApi;
@@ -30,8 +35,12 @@ public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
     private EditText txtCode5;
     private EditText txtCode6;
 
+    private CountDownTimer countDownTimer;
+
     private TextView instructionsTextView;
     private TextView fpResendCode;
+    private TextView fpEmailText;
+    private Patient patient;
     private int uniqueCode = -1;
 
     @Override
@@ -51,25 +60,98 @@ public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
 
         instructionsTextView = findViewById(R.id.fpInstructions);
         fpResendCode = findViewById(R.id.fpResendCode);
+        fpEmailText = findViewById(R.id.fpEmailBox);
+
+        patient = (Patient) getIntent().getSerializableExtra("patient");
+        URL.LOGGED_IN_PATIENT_ID = patient.getPatientId();
+
+        String text = "Didn't receive the OTP? ";
+        String resendOtpText = "RESEND OTP";
+
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text + resendOtpText);
 
 
-        Patient patient = (Patient) getIntent().getSerializableExtra("patient");
+        int start = text.length();
+        int end = start + resendOtpText.length();
+        spannableStringBuilder.setSpan(new ForegroundColorSpan(
+                ContextCompat.getColor(this, R.color.green)
+        ), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+        String instructionsText = getString(R.string.resend_code);
+        instructionsTextView.setText(instructionsText);
+
+        fpResendCode.setText(spannableStringBuilder);
+
         String email = patient.getPatientEmail();
-        String text = getString(R.string.instructions) + Helper.convertEmailToAsterisks(email);
-        instructionsTextView.setText(text);
+        fpEmailText.setText(email);
 
         SendMailSchema sendMailSchema = new SendMailSchema();
         sendMailSchema.setToEmail(email);
         sendMailSchema.setFromEmail(Store.EMAIL);
-        url.sendMail(sendMailSchema);
         setupEditTextListeners();
         txtCode1.requestFocus();
 
 
-        fpResendCode.setOnClickListener(v -> url.sendMail(sendMailSchema));
+        url.sendMail(sendMailSchema);
+        fpResendCode.setOnClickListener(view -> {
+            url.sendMail(sendMailSchema);
+            startCountDownTimer();
+            Toast.makeText(FPEnterCode.this, "OTP sent", Toast.LENGTH_SHORT).show();
+
+        });
 
 
     }
+
+    private void startCountDownTimer() {
+        // Disable the fpResendCode button
+        fpResendCode.setEnabled(false);
+
+        // Cancel any existing timer
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        // Start a new 30-second countdown timer
+        countDownTimer = new CountDownTimer(5 * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Display the remaining time
+                String text = "Resend OTP in " + (millisUntilFinished / 1000) + "s";
+                fpResendCode.setText(text);
+            }
+
+            @Override
+            public void onFinish() {
+                // Enable the fpResendCode button and reset the text
+                fpResendCode.setEnabled(true);
+
+                String resendOtpText = "RESEND OTP";
+
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(resendOtpText);
+
+
+                int start = 0;
+                int end = start + resendOtpText.length();
+                spannableStringBuilder.setSpan(new ForegroundColorSpan(
+                        ContextCompat.getColor(FPEnterCode.this, R.color.green)
+                ), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                fpResendCode.setText(spannableStringBuilder);
+            }
+        }.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Cancel the timer when the activity is destroyed
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
+
 
     private boolean areAllEditTextsFilled() {
         return !txtCode1.getText().toString().isEmpty()
@@ -88,6 +170,8 @@ public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
         txtCode4.addTextChangedListener(new CustomTextWatcher(txtCode4, txtCode5));
         txtCode5.addTextChangedListener(new CustomTextWatcher(txtCode5, txtCode6));
         txtCode6.addTextChangedListener(new CustomTextWatcher(txtCode6, null));
+
+
     }
 
     @Override
@@ -170,8 +254,12 @@ public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
                             txtCode6.getText().toString();
                     int codeInt = Integer.parseInt(code);
                     if (codeInt == uniqueCode) {
-                        Toast.makeText(FPEnterCode.this, "Code is correct", Toast.LENGTH_SHORT).show();
                         setEditTextBackgroundRed(false);
+                        Intent intent = new Intent(FPEnterCode.this,
+                                FPEnterPassword.class);
+                        startActivity(intent);
+                        finish();
+
                     } else {
                         Toast.makeText(FPEnterCode.this, "Code is incorrect", Toast.LENGTH_SHORT).show();
                         setEditTextBackgroundRed(true);

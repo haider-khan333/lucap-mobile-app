@@ -12,6 +12,7 @@ import com.fyp.lucapp.Interface.LoginCallback;
 import com.fyp.lucapp.Interface.OnClickSubmit;
 import com.fyp.lucapp.Interface.RegisterCallback;
 import com.fyp.lucapp.Schemas.AppointmentSchema;
+import com.fyp.lucapp.Schemas.EditPasswordSchema;
 import com.fyp.lucapp.Schemas.GetPatientSchema;
 import com.fyp.lucapp.Schemas.LoginSchema;
 import com.fyp.lucapp.Schemas.RegisterPatientSchema;
@@ -24,27 +25,15 @@ import java.nio.charset.StandardCharsets;
 
 public class URL {
     public static String LOGGED_IN_PATIENT_ID = "";
-    public static String IP = "192.168.1.65:8000";
-    public final String PATIENT_LOGIN = "http://" + IP + "/patient/login";
-    public final String PATIENT_REGISTER = "http://" + IP + "/patient/signup";
-    public final String GET_DOCTORS = "http://" + IP + "/doctor/get-doctors";
+    private static final String IP = "http://192.168.1.65:8000";
+    private final String GET_DOCTORS = IP + "/doctor/get-doctors";
+    private final Context context;
+    private LoginCallback loginCallback;
+    private RegisterCallback registerCallback;
 
-    public final String GET_PATIENT = "http://" + IP + "/patient/get-patient";
-    public final String GET_REPORTS = "http://" + IP + "/report/get-report";
+    private OnClickSubmit onClickSubmit;
 
-    public final String GET_APPOINTMENTS = "http://" + IP + "/patient/getappointments";
-    public final String ADD_APPOINTMENT = "http://" + IP + "/doctors/addappointment";
-
-    public final String SEND_MAIL = "http://" + IP + "/mail/send-mail";
-
-    public final String GET_MEDICINES = "http://" + IP + "/patient/get-medicines";
-    public Context context;
-    public LoginCallback loginCallback;
-    public RegisterCallback registerCallback;
-
-    public OnClickSubmit onClickSubmit;
-
-    public InterfaceApi interfaceApi;
+    private InterfaceApi interfaceApi;
 
 
     public URL(Context context, LoginCallback loginCallback) {
@@ -69,6 +58,67 @@ public class URL {
     }
 
 
+    public void updatePassword(EditPasswordSchema editPasswordSchema) {
+
+        RequestQueue requestQueue = Volley.
+                newRequestQueue(context);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("new_password", editPasswordSchema.getNewPassword());
+
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+        }
+
+        String EDIT_PASSWORD = IP + "/patient/update-password";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT,
+                EDIT_PASSWORD + "/" + LOGGED_IN_PATIENT_ID,
+                jsonObject, response -> {
+            try {
+                int statusCode = response.optInt("status_code");
+                if (statusCode == 200) {
+                    interfaceApi.onSuccess("Password changed successfully");
+                } else {
+                    interfaceApi.onError("Error changing password");
+                }
+
+            } catch
+            (Exception e) {
+                e.printStackTrace();
+                interfaceApi.onError(e.toString());
+            }
+        }, error -> {
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceApi.onError("Error changing password");
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceApi.onError(errorMessage);
+            }
+        });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
+
+
+    }
+
+
     public void sendMail(SendMailSchema sendMailSchema) {
         RequestQueue requestQueue = Volley.
                 newRequestQueue(context);
@@ -81,6 +131,7 @@ public class URL {
             e.printStackTrace();
         }
 
+        String SEND_MAIL = IP + "/mail/send-mail";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 SEND_MAIL,
                 jsonObject, response -> {
@@ -141,6 +192,7 @@ public class URL {
             e.printStackTrace();
         }
 
+        String PATIENT_LOGIN = IP + "/patient/login";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 PATIENT_LOGIN,
                 jsonObject, response -> {
@@ -191,6 +243,7 @@ public class URL {
             e.printStackTrace();
         }
 
+        String PATIENT_REGISTER = IP + "/patient/signup";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 PATIENT_REGISTER,
                 jsonObject, response -> {
@@ -289,6 +342,7 @@ public class URL {
         RequestQueue requestQueue = Volley.
                 newRequestQueue(context);
 
+        String GET_REPORTS = IP + "/report/get-report";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 GET_REPORTS + "/" + URL.LOGGED_IN_PATIENT_ID,
                 null, response -> {
@@ -335,6 +389,7 @@ public class URL {
         RequestQueue requestQueue = Volley.
                 newRequestQueue(context);
 
+        String GET_APPOINTMENTS = IP + "/patient/getappointments";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 GET_APPOINTMENTS + "/" + URL.LOGGED_IN_PATIENT_ID,
                 null, response -> {
@@ -393,6 +448,7 @@ public class URL {
             System.out.println(ex);
         }
 
+        String ADD_APPOINTMENT = IP + "/doctors/addappointment";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 ADD_APPOINTMENT,
                 jsonObject, response -> {
@@ -438,6 +494,7 @@ public class URL {
         RequestQueue requestQueue = Volley.
                 newRequestQueue(context);
 
+        String GET_MEDICINES = IP + "/patient/get-medicines";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 GET_MEDICINES + "/" + URL.LOGGED_IN_PATIENT_ID,
                 null, response -> {
@@ -497,6 +554,7 @@ public class URL {
             System.out.println(ex);
         }
 
+        String GET_PATIENT = IP + "/patient/get-patient";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 GET_PATIENT,
                 jsonObject, response -> {

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import com.fyp.lucapp.Fragments.Appointments.AppointmentListFragment;
 import com.fyp.lucapp.Fragments.DoctorsFragment;
 import com.fyp.lucapp.Fragments.MedicationsFragment;
-import com.fyp.lucapp.Fragments.ProfileFragment;
+import com.fyp.lucapp.Fragments.SettingsFragment;
 import com.fyp.lucapp.Fragments.ReportFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -35,7 +35,7 @@ public class Main extends AppCompatActivity {
                     loadFragment(new AppointmentListFragment(), 0);
                     break;
                 case R.id.nav_profile_settings:
-                    loadFragment(new ProfileFragment(), 0);
+                    loadFragment(new SettingsFragment(), 0);
                     break;
                 case R.id.nav_report:
                     loadFragment(new ReportFragment(), 0);

@@ -51,8 +51,6 @@ public class DoctorListAdapterView extends RecyclerView.Adapter<DoctorListAdapte
         String doctorBase64Image = doctorsData.getImage();
         Bitmap doctorImageBitmap = Helper.convertBase64ToBitmap(doctorBase64Image);
         holder.componentDoctorList.setDoctorImage(doctorImageBitmap);
-//        holder.componentDoctorList.setDoctorExperience("(" + doctorsData.
-//                getYearsOfExperience() + " Years)");
         holder.componentDoctorList.setDoctorPhone(doctorsData.getPhone());
         holder.componentDoctorList.setDoctorEmail(doctorsData.getEmail());
 
