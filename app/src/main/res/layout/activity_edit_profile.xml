@@ -1,114 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
-    <com.fyp.lucapp.Components.Header.ComponentHeader
-        android:id="@+id/edit_componentHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <com.fyp.lucapp.Components.EditUserImage.ComponentEditUserImage
-        android:id="@+id/edit_componentEditUserImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
+
+
+        <com.fyp.lucapp.Components.Header.ComponentHeader
+            android:id="@+id/edit_componentHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.fyp.lucapp.Components.EditUserImage.ComponentEditUserImage
+            android:id="@+id/edit_componentEditUserImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <com.fyp.lucapp.Components.ComponentTextView
+                    android:id="@+id/edit_componentTextViewFirstName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.5" />
+
+                <com.fyp.lucapp.Components.ComponentTextView
+                    android:id="@+id/edit_componentTextViewLastName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.5" />
+
+            </LinearLayout>
+
 
             <com.fyp.lucapp.Components.ComponentTextView
-                android:id="@+id/edit_componentTextViewFirstName"
-                android:layout_width="0dp"
+                android:id="@+id/edit_componentTextViewId"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="0.5" />
+                android:layout_margin="10dp" />
+
 
             <com.fyp.lucapp.Components.ComponentTextView
-                android:id="@+id/edit_componentTextViewLastName"
-                android:layout_width="0dp"
+                android:id="@+id/edit_componentTextViewEmail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="0.5" />
+                android:layout_margin="10dp" />
+
+            <com.fyp.lucapp.Components.ComponentTextView
+                android:id="@+id/edit_componentTextViewPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp" />
+
+            <com.fyp.lucapp.Components.ComponentTextView
+                android:id="@+id/edit_componentTextViewAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp" />
+
+
+            <com.fyp.lucapp.Components.GenderSelection.ComponentGenderSelection
+                android:id="@+id/edit_componentGenderSelection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp" />
+
 
         </LinearLayout>
 
-
-        <com.fyp.lucapp.Components.ComponentTextView
-            android:id="@+id/edit_componentTextViewId"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp" />
+            android:layout_height="match_parent"
+            android:gravity="bottom">
 
+            <com.fyp.lucapp.Components.ComponentLoader
+                android:id="@+id/edit_componentLoader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
 
-        <com.fyp.lucapp.Components.ComponentTextView
-            android:id="@+id/edit_componentTextViewEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp" />
-
-        <com.fyp.lucapp.Components.ComponentTextView
-            android:id="@+id/edit_componentTextViewPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp" />
-
-        <com.fyp.lucapp.Components.ComponentTextView
-            android:id="@+id/edit_componentTextViewAge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp" />
-
-
-        <com.fyp.lucapp.Components.GenderSelection.ComponentGenderSelection
-            android:id="@+id/edit_componentGenderSelection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp" />
-
+            <Button
+                android:id="@+id/edit_updateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@xml/button_background"
+                android:drawableEnd="@drawable/right_arrow_foreground"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="start|center_vertical"
+                android:text="@string/update"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </FrameLayout>
 
 
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom">
 
-        <com.fyp.lucapp.Components.ComponentLoader
-            android:id="@+id/edit_componentLoader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/edit_updateButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="5dp"
-            android:background="@xml/button_background"
-            android:drawableEnd="@drawable/right_arrow_foreground"
-            android:fontFamily="@font/poppins_semibold"
-            android:gravity="start|center_vertical"
-            android:text="@string/update"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </FrameLayout>
-
-
-</LinearLayout>
+</ScrollView>

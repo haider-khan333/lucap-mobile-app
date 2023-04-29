@@ -5,397 +5,283 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <com.fyp.lucapp.Components.Header.ComponentHeader
+        android:id="@+id/dd_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <com.fyp.lucapp.Components.ComponentDoctorList
+        android:id="@+id/dd_doctorList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_margin="10dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/backButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/return_icon_foreground" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_vertical"
-                android:text="@string/appoint_doctor"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/list_background"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-
-            <LinearLayout
-                android:layout_width="300dp"
-                android:layout_height="100dp"
-                android:layout_margin="2dp"
-                android:layout_weight="1"
-                android:padding="5dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:cardCornerRadius="20dp">
-
-
-                    <ImageView
-                        android:id="@+id/docImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop" />
-
-
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/cardDoctorName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_light"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="2sp" />
-
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="16dp"
+                        android:foregroundGravity="center"
+                        app:cardCornerRadius="160dp"
+                        app:cardElevation="16dp">
+
+                        <!-- simple image view -->
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/people_foreground" />
+
+
+                    </androidx.cardview.widget.CardView>
 
                     <TextView
-                        android:id="@+id/speciality"
+                        android:id="@+id/patients"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:fontFamily="@font/poppins_light"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="@string/patients"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
 
-        </LinearLayout>
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="16dp"
+                        android:foregroundGravity="center"
+                        app:cardCornerRadius="160dp"
+                        app:cardElevation="16dp">
+
+                        <!-- simple image view -->
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/experience_foreground" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    </androidx.cardview.widget.CardView>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="vertical">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="16dp"
-                    android:foregroundGravity="center"
-                    app:cardCornerRadius="160dp"
-                    app:cardElevation="16dp">
-
-                    <!-- simple image view -->
-                    <ImageView
+                    <TextView
+                        android:id="@+id/experience"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/people_foreground" />
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins_light"
+                        android:textColor="@color/black" />
 
-
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/patients"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_light"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="@string/patients"
-                    android:textColor="@color/black" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="vertical">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="16dp"
-                    android:foregroundGravity="center"
-                    app:cardCornerRadius="160dp"
-                    app:cardElevation="16dp">
-
-                    <!-- simple image view -->
-                    <ImageView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/experience_foreground" />
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="@string/experience"
+                        android:textColor="@color/black" />
 
+                </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/experience"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_light"
-                    android:textColor="@color/black" />
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="@string/experience"
-                    android:textColor="@color/black" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="16dp"
+                        android:background="@drawable/gradient_cardview"
+                        android:foregroundGravity="center"
+                        app:cardCornerRadius="160dp"
+                        app:cardElevation="16dp">
 
-            </LinearLayout>
+                        <!-- simple image view -->
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/star_foreground" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="16dp"
-                    android:background="@drawable/gradient_cardview"
-                    android:foregroundGravity="center"
-                    app:cardCornerRadius="160dp"
-                    app:cardElevation="16dp">
+                    </androidx.cardview.widget.CardView>
 
-                    <!-- simple image view -->
-                    <ImageView
+                    <TextView
+                        android:id="@+id/rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/star_foreground" />
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins_light"
+                        android:textColor="@color/black" />
 
-
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_light"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="@string/rating"
-                    android:textColor="@color/black" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="vertical">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="16dp"
-                    android:background="@drawable/gradient_cardview"
-                    android:foregroundGravity="center"
-                    app:cardCornerRadius="160dp"
-                    app:cardElevation="16dp">
-
-                    <!-- simple image view -->
-                    <ImageView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/comments_foreground" />
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="@string/rating"
+                        android:textColor="@color/black" />
 
+                </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/reviews"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_light"
-                    android:textColor="@color/black" />
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="@string/reviews"
-                    android:textColor="@color/black" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="16dp"
+                        android:background="@drawable/gradient_cardview"
+                        android:foregroundGravity="center"
+                        app:cardCornerRadius="160dp"
+                        app:cardElevation="16dp">
+
+                        <!-- simple image view -->
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/comments_foreground" />
+
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/reviews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins_light"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="@string/reviews"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
 
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp">
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/poppins_semibold"
-            android:gravity="center_vertical"
-            android:text="@string/about_me"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/doctorDescription"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:fontFamily="@font/poppins_light"
-            android:gravity="top"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/poppins_semibold"
-            android:gravity="center_vertical"
-            android:text="@string/working_time"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/leftArrow"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:layout_gravity="start"-->
-            <!--                android:layout_weight="1"-->
-            <!--                app:drawableStartCompat="@drawable/left_arrow_foreground" />-->
-
-            <TextView
-                android:id="@+id/workingTimeDate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/poppins_light"
-                android:gravity="start"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/rightArrow"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:gravity="end"-->
-            <!--                app:drawableEndCompat="@drawable/forward_arrow_foreground" />-->
-
-        </LinearLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/menu_drop"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-
-            <AutoCompleteTextView
-                android:id="@+id/drop_items"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="0dp"
-                android:background="@xml/edit_text"
-                android:focusable="false"
-                android:inputType="none"
-                android:padding="0dp"
-                android:text="@string/choose_time"
-                android:textSize="15sp" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <!--Include the working time list-->
-        <!--        <include-->
-        <!--            android:id="@+id/workingTime"-->
-        <!--            layout="@layout/fragment_working_time" />-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:gravity="center_vertical"
+                    android:text="@string/about_me"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/doctorDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:fontFamily="@font/poppins_light"
+                    android:gravity="top"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:gravity="center_vertical"
+                        android:text="@string/working_time"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.fyp.lucapp.Components.DayNavigation.ComponentDayNavigation
+                        android:id="@+id/dayNavigation"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:gravity="center_vertical" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/appointmentGrid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                app:alignContent="stretch"
+                app:alignItems="stretch"
+                app:flexWrap="wrap" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:padding="5dp">
         <!--Appoint Button-->
         <Button
@@ -414,3 +300,5 @@
 
 
 </LinearLayout>
+
+

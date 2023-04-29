@@ -34,9 +34,9 @@
             android:name=".Views.CalenderActivity"
             android:parentActivityName=".Views.DoctorDetailsActivity" />
 
-<!--        <activity-->
-<!--            android:name=".Main"-->
-<!--            android:parentActivityName=".Views.LoginActivity" />-->
+        <activity
+            android:name=".Main"
+            android:parentActivityName=".Views.LoginActivity" />
 
         <activity
             android:name=".Views.Registration.RegisterPatientDetails"
@@ -76,7 +76,7 @@
 
 
         <activity
-            android:name=".Main"
+            android:name=".Views.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
