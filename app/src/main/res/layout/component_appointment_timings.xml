@@ -11,19 +11,17 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/style_appointment_time"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="5dp">
 
 
         <TextView
             android:id="@+id/appointment_time"
-            android:layout_margin="5dp"
+            android:layout_margin="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/poppins_light"
-            android:text="01, Monday 2020"
             android:textColor="@color/white"
             android:textSize="12sp" />
     </LinearLayout>

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class DoctorsData implements Serializable {
 
+
+
     private int id;
     private String email;
     private String username;

@@ -8,10 +8,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.fyp.lucapp.Interface.InterfaceApi;
+import com.fyp.lucapp.Interface.InterfaceAppointments;
 import com.fyp.lucapp.Interface.LoginCallback;
 import com.fyp.lucapp.Interface.OnClickSubmit;
 import com.fyp.lucapp.Interface.RegisterCallback;
 import com.fyp.lucapp.Schemas.AppointmentSchema;
+import com.fyp.lucapp.Schemas.ConfirmAppointmentSchema;
 import com.fyp.lucapp.Schemas.EditPasswordSchema;
 import com.fyp.lucapp.Schemas.GetPatientSchema;
 import com.fyp.lucapp.Schemas.LoginSchema;
@@ -35,6 +37,7 @@ public class URL {
     private OnClickSubmit onClickSubmit;
 
     private InterfaceApi interfaceApi;
+    private InterfaceAppointments interfaceAppointments;
 
 
     public URL(Context context, LoginCallback loginCallback) {
@@ -56,6 +59,11 @@ public class URL {
     public URL(Context context, OnClickSubmit onClick) {
         this.context = context;
         this.onClickSubmit = onClick;
+    }
+
+    public URL(Context context, InterfaceAppointments interfaceAppointments) {
+        this.context = context;
+        this.interfaceAppointments = interfaceAppointments;
     }
 
 
@@ -322,6 +330,7 @@ public class URL {
                 null, response -> {
             try {
                 JSONObject doctorJson = response.getJSONObject("doctors_list");
+                System.out.println("Doctor: " + doctorJson);
                 interfaceApi.onSuccess(doctorJson);
 
             } catch
@@ -336,6 +345,66 @@ public class URL {
             interfaceApi.onError(error);
         }
         );
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
+    }
+
+
+
+    public void confirmAppointment(ConfirmAppointmentSchema confirmAppointment) {
+        RequestQueue requestQueue = Volley.
+                newRequestQueue(context);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("doctor_id", confirmAppointment.getDoctorID());
+            jsonObject.put("day", confirmAppointment.getDay());
+            jsonObject.put("time", confirmAppointment.getTime());
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+        }
+
+        String CONFIRM_APPOINTMENT = IP + "/doctor/book-doctor/" + URL.LOGGED_IN_PATIENT_ID;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT,
+                CONFIRM_APPOINTMENT,
+                jsonObject, response -> {
+            try {
+                String statusCode = response.getString("status_code");
+                if (statusCode.equals("200")) {
+                    interfaceAppointments.onAppointmentSuccess();
+
+                }
+
+            } catch
+            (Exception e) {
+                e.printStackTrace();
+                interfaceAppointments.onAppointmentFailure(e.toString());
+            }
+        }, error -> {
+            System.out.println("Error: " + error);
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceAppointments.onAppointmentFailure("Appointment not registered");
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceAppointments.onAppointmentFailure(errorMessage);
+            }
+        });
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

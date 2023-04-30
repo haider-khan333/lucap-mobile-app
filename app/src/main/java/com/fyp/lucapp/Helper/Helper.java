@@ -2,6 +2,7 @@ package com.fyp.lucapp.Helper;
 
 import android.graphics.Bitmap;
 
+import com.fyp.lucapp.BasicModels.DSpecificDoctor;
 import com.fyp.lucapp.BasicModels.Data;
 import com.fyp.lucapp.BasicModels.DoctorsData;
 import com.fyp.lucapp.BasicModels.Medications;
@@ -13,7 +14,12 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Helper {
 
@@ -114,6 +120,71 @@ public class Helper {
         }
 
         return doctorsDataArrayList;
+    }
+
+
+    public static DSpecificDoctor getSpecificDoctorDetails(JSONObject docList) {
+        DSpecificDoctor dSpecificDoctor = new DSpecificDoctor();
+        try {
+            dSpecificDoctor.setId(docList.getInt("id"));
+            dSpecificDoctor.setStatus(docList.getString("status"));
+            dSpecificDoctor.setEmail(docList.getString("email"));
+            dSpecificDoctor.setUsername(docList.getString("username"));
+            dSpecificDoctor.setPhone(docList.getString("phone"));
+            dSpecificDoctor.setSpeciality(docList.getString("speciality"));
+            dSpecificDoctor.setImage(docList.getString("image"));
+            dSpecificDoctor.setNumberOfPatients(docList.getInt("no_of_patients"));
+            dSpecificDoctor.setYearsOfExperience(docList.getInt("years_of_experience"));
+            dSpecificDoctor.setAbout(docList.getString("about"));
+
+            JSONArray currentReviewsList = docList.getJSONArray("current_reviews");
+            List<String> currentReviews = new ArrayList<>();
+            for (int i = 0; i < currentReviewsList.length(); i++) {
+                currentReviews.add(currentReviewsList.getString(i));
+            }
+            dSpecificDoctor.setCurrentReviews(currentReviews);
+            dSpecificDoctor.setCurrentRatings(docList.getString("current_ratings"));
+
+            dSpecificDoctor.setAvailableTimes(getWorkingTime(
+                    docList.getJSONArray("available_times")));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return dSpecificDoctor;
+    }
+
+    private static LinkedList<Map<String, List<Integer>>> getWorkingTime(JSONArray jsonArray) {
+        LinkedList<Map<String, List<Integer>>> returnList = new LinkedList<>();
+
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String day = jsonObject.getString("day");
+                JSONArray timingsJsonArray = jsonObject.getJSONArray("timings");
+                List<Integer> timingsList = new ArrayList<>();
+                for (int j = 0; j < timingsJsonArray.length(); j++) {
+                    timingsList.add(timingsJsonArray.getInt(j));
+                }
+                returnList.add(new HashMap<String, List<Integer>>() {{
+                    put(day, timingsList);
+                }});
+
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+
+        Collections.sort(returnList, new Comparator<Map<String, List<Integer>>>() {
+            @Override
+            public int compare(Map<String, List<Integer>> o1, Map<String, List<Integer>> o2) {
+                return o1.keySet().toArray()[0].toString().compareTo(o2.keySet().
+                        toArray()[0].toString());
+            }
+        });
+
+        return returnList;
     }
 
 

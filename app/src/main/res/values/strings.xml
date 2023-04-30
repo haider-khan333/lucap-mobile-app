@@ -130,4 +130,7 @@
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="change_password">Change Password</string>
     <string name="gender">Gender</string>
+    <string name="confirm_appointment">Confirm appointment</string>
+    <string name="appointment_instructions">Below are the details of your appointment. Check the details carefully and confirm your appointment.</string>
+    <string name="confirm">Confirm</string>
 </resources>

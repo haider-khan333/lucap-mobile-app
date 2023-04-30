@@ -30,6 +30,7 @@
             android:name=".Views.DoctorDetailsActivity"
             android:parentActivityName=".Main" />
 
+
         <activity
             android:name=".Views.CalenderActivity"
             android:parentActivityName=".Views.DoctorDetailsActivity" />

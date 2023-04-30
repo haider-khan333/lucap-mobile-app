@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.R;
 
 public class ComponentDoctorList extends LinearLayout {
@@ -50,6 +51,12 @@ public class ComponentDoctorList extends LinearLayout {
     }
 
     public void setDoctorImage(Bitmap doctorBitmap) {
+        this.doctorImage.setImageBitmap(doctorBitmap);
+
+    }
+
+    public void setDoctorImage(String doctorBase64) {
+        Bitmap doctorBitmap = Helper.convertBase64ToBitmap(doctorBase64);
         this.doctorImage.setImageBitmap(doctorBitmap);
 
     }
