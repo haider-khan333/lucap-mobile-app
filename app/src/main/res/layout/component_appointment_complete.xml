@@ -18,7 +18,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:baselineAligned="false"
             android:orientation="horizontal"
             android:padding="10dp">
@@ -37,7 +36,7 @@
                     app:cardCornerRadius="20dp">
 
                     <ImageView
-                        android:id="@+id/docImage"
+                        android:id="@+id/cmp_docImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
@@ -50,34 +49,38 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="0.5"
                 android:orientation="vertical">
 
 
-                <TextView
-                    android:id="@+id/cardDoctorName"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="Dr. Jennifer"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/cmp_doctorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="Dr. Jennifer"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/dot_complete"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        />
+                </LinearLayout>
+
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:background="@drawable/complete_component_background"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="@string/completed"
-                    android:textColor="@color/accept" />
-
-
-                <TextView
-                    android:id="@+id/cardDoctorSpeciality"
+                    android:id="@+id/cmp_docSpeciality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -86,7 +89,7 @@
                     android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/timing"
+                    android:id="@+id/cmp_dateTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -111,11 +114,16 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Button
+            <TextView
+                android:id="@+id/cmp_leaveReviewBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_margin="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="3dp"
+                android:padding="6dp"
+                android:textColor="@color/white"
+                android:paddingRight="10dp"
                 android:background="@xml/button_background"
                 android:fontFamily="@font/poppins_light"
                 android:text="@string/leave_a_review"

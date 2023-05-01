@@ -133,4 +133,5 @@
     <string name="confirm_appointment">Confirm appointment</string>
     <string name="appointment_instructions">Below are the details of your appointment. Check the details carefully and confirm your appointment.</string>
     <string name="confirm">Confirm</string>
+    <string name="click_to_view_reason_for_cancellation">Click to view reason for cancellation</string>
 </resources>

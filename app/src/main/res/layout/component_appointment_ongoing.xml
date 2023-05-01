@@ -18,7 +18,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:baselineAligned="false"
             android:orientation="horizontal"
             android:padding="10dp">
@@ -37,7 +36,7 @@
                     app:cardCornerRadius="20dp">
 
                     <ImageView
-                        android:id="@+id/docImage"
+                        android:id="@+id/ong_docImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
@@ -50,34 +49,38 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="0.5"
                 android:orientation="vertical">
 
 
-                <TextView
-                    android:id="@+id/cardDoctorName"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="Dr. Jennifer"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/ong_doctorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="Dr. Jennifer"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/dot_ongoing" />
+                </LinearLayout>
+
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:background="@drawable/upcoming_component_background"
-                    android:fontFamily="@font/poppins_light"
-                    android:text="@string/upcoming"
-                    android:textColor="@color/medical_blue" />
-
-
-                <TextView
-                    android:id="@+id/cardDoctorSpeciality"
+                    android:id="@+id/ong_docSpeciality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -86,7 +89,7 @@
                     android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/timing"
+                    android:id="@+id/ong_dateTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -111,33 +114,19 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Button
+            <TextView
+                android:id="@+id/ong_cancelAppointmentBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:background="@xml/button_background"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="3dp"
+                android:background="@drawable/style_btn_cancel"
                 android:fontFamily="@font/poppins_light"
-                android:gravity="right | center_vertical"
+                android:padding="6dp"
                 android:text="@string/cancel_appointment"
-                android:textAllCaps="false" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="end | center_vertical"
-                android:layout_marginEnd="20dp"
-                app:cardCornerRadius="160dp"
-                app:cardElevation="16dp">
-
-                <!-- simple image view -->
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/comments_foreground" />
-
-
-            </androidx.cardview.widget.CardView>
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
 
 
         </FrameLayout>

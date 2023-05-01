@@ -13,10 +13,10 @@
     <color name="custom">#FFFAFA</color>
     <color name="medical_blue">#2196F3</color>
     <color name="accept">#4FBF26</color>
+    <color name="ongoing">#FF9800</color>
     <color name="reject">#F44336</color>
     <color name="green">#134E5E</color>
-    <color name="red">#B71C1C</color>
-
+    <color name="red">#C21807</color>
 
 
 </resources>
