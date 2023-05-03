@@ -67,6 +67,57 @@ public class URL {
     }
 
 
+    public void getAppointments() {
+        RequestQueue requestQueue = Volley.
+                newRequestQueue(context);
+
+        String GET_APPOINTMENTS = IP + "/appointment/patient/get-appointments";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                GET_APPOINTMENTS + "/" + URL.LOGGED_IN_PATIENT_ID,
+                null, response -> {
+            try {
+                int statusCode = response.getInt("status_code");
+                if (statusCode == 200) {
+                    JSONArray reportsJsonList = response.getJSONArray("appointment_list");
+                    interfaceApi.onSuccess(reportsJsonList);
+                } else {
+                    interfaceApi.onError(response.getString("message"));
+                }
+            } catch
+            (Exception e) {
+                e.printStackTrace();
+                interfaceApi.onError(e.toString());
+            }
+        }, error -> {
+            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
+            if (statusCode == 404) {
+                interfaceApi.onError("No appointments found");
+            } else {
+                String errorMessage = "Error: " + statusCode;
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                        String responseBody = new String(error.networkResponse.data,
+                                StandardCharsets.UTF_8);
+                        JSONObject data = new JSONObject(responseBody);
+                        errorMessage = data.getString("detail");
+
+                    } catch
+                    (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                interfaceApi.onError(errorMessage);
+            }
+
+        });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
+    }
+
+
     public void updatePassword(EditPasswordSchema editPasswordSchema) {
 
         RequestQueue requestQueue = Volley.
@@ -354,7 +405,7 @@ public class URL {
 
 
 
-    public void confirmAppointment(ConfirmAppointmentSchema confirmAppointment) {
+    public void bookAppointment(ConfirmAppointmentSchema confirmAppointment) {
         RequestQueue requestQueue = Volley.
                 newRequestQueue(context);
         JSONObject jsonObject = new JSONObject();
@@ -413,6 +464,9 @@ public class URL {
     }
 
 
+
+
+
     public void getReports() {
         RequestQueue requestQueue = Volley.
                 newRequestQueue(context);
@@ -460,109 +514,7 @@ public class URL {
     }
 
 
-    public void getAppointments() {
-        RequestQueue requestQueue = Volley.
-                newRequestQueue(context);
 
-        String GET_APPOINTMENTS = IP + "/patient/getappointments";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                GET_APPOINTMENTS + "/" + URL.LOGGED_IN_PATIENT_ID,
-                null, response -> {
-            try {
-                JSONArray reportsJsonList = response.getJSONArray("appointments");
-                interfaceApi.onSuccess(reportsJsonList);
-            } catch
-            (Exception e) {
-                e.printStackTrace();
-                interfaceApi.onError(e.toString());
-            }
-        }, error -> {
-            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
-            if (statusCode == 404) {
-                interfaceApi.onError("No appointments found");
-            } else {
-                String errorMessage = "Error: " + statusCode;
-                if (error.networkResponse != null && error.networkResponse.data != null) {
-                    try {
-                        String responseBody = new String(error.networkResponse.data,
-                                StandardCharsets.UTF_8);
-                        JSONObject data = new JSONObject(responseBody);
-                        errorMessage = data.getString("detail");
-
-                    } catch
-                    (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                interfaceApi.onError(errorMessage);
-            }
-
-        });
-
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(jsonObjectRequest);
-    }
-
-
-    public void addAppointments(AppointmentSchema appointmentSchema) {
-        RequestQueue requestQueue = Volley.
-                newRequestQueue(context);
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("doctor_id", appointmentSchema.getDoctorId());
-            jsonObject.put("patient_id", appointmentSchema.getPatientId());
-            jsonObject.put("day", appointmentSchema.getDate());
-            jsonObject.put("start_time", appointmentSchema.getStart_time());
-            jsonObject.put("end_time", appointmentSchema.getEnd_time());
-            System.out.println(jsonObject);
-
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-
-        String ADD_APPOINTMENT = IP + "/doctors/addappointment";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                ADD_APPOINTMENT,
-                jsonObject, response -> {
-            try {
-                String message = response.getString("message");
-                onClickSubmit.onSuccessSubmit(message);
-            } catch
-            (Exception e) {
-                e.printStackTrace();
-                onClickSubmit.onFailure(e.toString());
-            }
-        }, error -> {
-            int statusCode = error.networkResponse != null ? error.networkResponse.statusCode : -1;
-            if (statusCode == 404) {
-                interfaceApi.onError(error);
-            } else {
-                String errorMessage = "Error: " + statusCode;
-                if (error.networkResponse != null && error.networkResponse.data != null) {
-                    try {
-                        String responseBody = new String(error.networkResponse.data,
-                                StandardCharsets.UTF_8);
-                        JSONObject data = new JSONObject(responseBody);
-                        errorMessage = data.getString("detail");
-
-                    } catch
-                    (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                interfaceApi.onError(errorMessage);
-            }
-
-        });
-
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(jsonObjectRequest);
-    }
 
 
     public void getMedicines() {

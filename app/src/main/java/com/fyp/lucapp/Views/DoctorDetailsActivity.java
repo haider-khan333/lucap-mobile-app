@@ -349,7 +349,7 @@ public class DoctorDetailsActivity extends AppCompatActivity implements Interfac
             confirmAppointmentSchema.setDoctorID(dSpecificDoctor.getId());
             confirmAppointmentSchema.setDay(gDay);
             confirmAppointmentSchema.setTime(gTime);
-            url.confirmAppointment(confirmAppointmentSchema);
+            url.bookAppointment(confirmAppointmentSchema);
             bottomSheetDialog.dismiss();
 
 

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fyp.lucapp.BasicModels.DAppointmentAdapter;
+import com.fyp.lucapp.BasicModels.DAppointment;
 import com.fyp.lucapp.Components.CompleteAppointment.ComponentCompleteAppointment;
 import com.fyp.lucapp.Interface.InterfaceClickItem;
 import com.fyp.lucapp.R;
@@ -16,16 +16,14 @@ import java.util.List;
 
 public class CompletedAdapter extends RecyclerView.Adapter<CompletedAdapter.CompletedViewHolder> {
 
-    private List<DAppointmentAdapter> appointments;
+    private List<DAppointment> appointments;
     private InterfaceClickItem interfaceClickItem;
 
     public CompletedAdapter() {
     }
 
-    public CompletedAdapter(List<DAppointmentAdapter> appointments
-            , InterfaceClickItem interfaceClickItem) {
+    public CompletedAdapter(List<DAppointment> appointments) {
         this.appointments = appointments;
-        this.interfaceClickItem = interfaceClickItem;
     }
 
     @NonNull
@@ -38,7 +36,7 @@ public class CompletedAdapter extends RecyclerView.Adapter<CompletedAdapter.Comp
 
     @Override
     public void onBindViewHolder(@NonNull CompletedAdapter.CompletedViewHolder holder, int position) {
-        DAppointmentAdapter appointment = appointments.get(position);
+        DAppointment appointment = appointments.get(position);
         holder.componentCompleteAppointment.setDocName(appointment.getDoctorName());
         holder.componentCompleteAppointment.setDocSpeciality(appointment.getDoctorSpeciality());
         holder.componentCompleteAppointment.setDocImage(appointment.getDoctorImage());
@@ -50,8 +48,10 @@ public class CompletedAdapter extends RecyclerView.Adapter<CompletedAdapter.Comp
     @Override
     public int getItemCount() {
         if (appointments != null) {
+            System.out.println("size Completed " + appointments.size());
             return appointments.size();
         } else {
+            System.out.println("size Completed 0");
             return 0;
         }
     }

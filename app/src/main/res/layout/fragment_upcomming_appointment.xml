@@ -8,4 +8,4 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".Fragments.Appointments.UpcomingAppointmentFragment" />
+    tools:context=".Fragments.Appointments.UpcomingAppointmentFragment"/>

@@ -2,14 +2,16 @@ package com.fyp.lucapp.BasicModels;
 
 import java.io.Serializable;
 
-public class DAppointmentAdapter implements Serializable {
+public class DAppointment implements Serializable {
 
     private String doctorName;
     private String doctorImage;
     private String doctorSpeciality;
     private String doctorTiming;
 
-    public DAppointmentAdapter() {
+    private String status;
+
+    public DAppointment() {
     }
 
     public String getDoctorName() {
@@ -42,5 +44,13 @@ public class DAppointmentAdapter implements Serializable {
 
     public void setDoctorTiming(String doctorTiming) {
         this.doctorTiming = doctorTiming;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

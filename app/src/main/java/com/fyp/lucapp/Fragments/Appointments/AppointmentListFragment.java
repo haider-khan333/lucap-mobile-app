@@ -9,11 +9,16 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.fyp.lucapp.Adapters.ViewPagerAdapter;
-import com.fyp.lucapp.BasicModels.DAppointmentAdapter;
+import com.fyp.lucapp.BasicModels.DAppointment;
+import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Components.ComponentLoader;
+import com.fyp.lucapp.Helper.Helper;
+import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.R;
 import com.google.android.material.tabs.TabLayout;
+
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -22,7 +27,7 @@ public class AppointmentListFragment extends Fragment implements InterfaceApi {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    private List<DAppointmentAdapter> appointmentData;
+    private List<DAppointment> appointmentData;
     private ComponentLoader componentLoader;
 
     public AppointmentListFragment() {
@@ -57,16 +62,18 @@ public class AppointmentListFragment extends Fragment implements InterfaceApi {
 
 
     public void loadDataFromApi() {
-
+        URL url = new URL(getContext(), this);
+        url.getAppointments();
     }
 
     @Override
     public void onSuccess(Object object) {
 
-        List<DAppointmentAdapter> data = (List<DAppointmentAdapter>) object;
+        JSONArray data = (JSONArray) object;
+        appointmentData = Helper.getAppointmentData(data);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(),
-                data);
+                appointmentData);
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -80,6 +87,9 @@ public class AppointmentListFragment extends Fragment implements InterfaceApi {
 
     @Override
     public void onError(Object message) {
+        ComponentCustomDialogue dialogue = new ComponentCustomDialogue(getContext(),
+                "Error", message.toString(), R.raw.cancel_animation);
+        dialogue.onShow();
 
     }
 }

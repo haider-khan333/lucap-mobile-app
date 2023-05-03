@@ -2,6 +2,7 @@ package com.fyp.lucapp.Helper;
 
 import android.graphics.Bitmap;
 
+import com.fyp.lucapp.BasicModels.DAppointment;
 import com.fyp.lucapp.BasicModels.DSpecificDoctor;
 import com.fyp.lucapp.BasicModels.Data;
 import com.fyp.lucapp.BasicModels.DoctorsData;
@@ -268,6 +269,28 @@ public class Helper {
 
 
         return patient;
+    }
+
+    public static List<DAppointment> getAppointmentData(JSONArray appList) {
+        List<DAppointment> dAppointmentList = new ArrayList<>();
+
+        for (int i = 0; i < appList.length(); i++) {
+            JSONObject appObject = appList.optJSONObject(i);
+            DAppointment dAppointment = new DAppointment();
+            dAppointment.setDoctorName(appObject.optString("doctor_name"));
+            dAppointment.setDoctorSpeciality(appObject.optString("doctor_speciality"));
+            dAppointment.setDoctorImage(appObject.optString("doctor_image"));
+            dAppointment.setStatus(appObject.optString("status"));
+            String day = appObject.optString("day");
+            String time = appObject.optString("time");
+
+            dAppointment.setDoctorTiming(day + " | " + time);
+            dAppointmentList.add(dAppointment);
+        }
+
+
+        return dAppointmentList;
+
     }
 
     public static String convertEmailToAsterisks(String email) {

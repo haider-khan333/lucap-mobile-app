@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.fyp.lucapp.BasicModels.DAppointmentAdapter;
+import com.fyp.lucapp.BasicModels.DAppointment;
 import com.fyp.lucapp.Fragments.Appointments.CancelAppointmentFragment;
 import com.fyp.lucapp.Fragments.Appointments.CompleteAppointmentFragment;
 import com.fyp.lucapp.Fragments.Appointments.UpcomingAppointmentFragment;
@@ -15,10 +15,10 @@ import java.util.List;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private List<DAppointmentAdapter> appointmentData;
+    private final List<DAppointment> appointmentData;
 
     public ViewPagerAdapter(@NonNull FragmentManager fm,
-                            List<DAppointmentAdapter> appointmentData) {
+                            List<DAppointment> appointmentData) {
         super(fm);
         this.appointmentData = appointmentData;
     }
@@ -29,9 +29,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             return UpcomingAppointmentFragment.newInstance(appointmentData);
         } else if (position == 1) {
-            return new CompleteAppointmentFragment();
+            return CompleteAppointmentFragment.newInstance(appointmentData);
         } else {
-            return new CancelAppointmentFragment();
+            return CancelAppointmentFragment.newInstance(appointmentData);
         }
     }
 

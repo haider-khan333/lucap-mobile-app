@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fyp.lucapp.BasicModels.DAppointmentAdapter;
+import com.fyp.lucapp.BasicModels.DAppointment;
 import com.fyp.lucapp.Components.CancelledAppointment.ComponentCancelledAppointment;
 import com.fyp.lucapp.Interface.InterfaceClickItem;
 import com.fyp.lucapp.R;
@@ -15,16 +15,14 @@ import com.fyp.lucapp.R;
 import java.util.List;
 
 public class CanceledAdapter extends RecyclerView.Adapter<CanceledAdapter.CanceledViewHolder> {
-    private List<DAppointmentAdapter> appointments;
+    private List<DAppointment> appointments;
     private InterfaceClickItem interfaceClickItem;
 
     public CanceledAdapter() {
     }
 
-    public CanceledAdapter(List<DAppointmentAdapter> appointments
-            , InterfaceClickItem interfaceClickItem) {
+    public CanceledAdapter(List<DAppointment> appointments) {
         this.appointments = appointments;
-        this.interfaceClickItem = interfaceClickItem;
     }
 
 
@@ -39,7 +37,7 @@ public class CanceledAdapter extends RecyclerView.Adapter<CanceledAdapter.Cancel
 
     @Override
     public void onBindViewHolder(@NonNull CanceledAdapter.CanceledViewHolder holder, int position) {
-        DAppointmentAdapter appointment = appointments.get(position);
+        DAppointment appointment = appointments.get(position);
         holder.componentCancelledAppointment.setDocName(appointment.getDoctorName());
         holder.componentCancelledAppointment.setDocSpeciality(appointment.getDoctorSpeciality());
         holder.componentCancelledAppointment.setDocImage(appointment.getDoctorImage());
@@ -49,8 +47,10 @@ public class CanceledAdapter extends RecyclerView.Adapter<CanceledAdapter.Cancel
     @Override
     public int getItemCount() {
         if (appointments != null) {
+            System.out.println("size Canceled " + appointments.size());
             return appointments.size();
         } else {
+            System.out.println("size Canceled 0");
             return 0;
         }
     }
