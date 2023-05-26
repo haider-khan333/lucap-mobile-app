@@ -2,7 +2,7 @@ package com.fyp.lucapp.BasicModels;
 
 import java.io.Serializable;
 
-public class DoctorsData implements Serializable {
+public class DDoctor implements Serializable {
 
 
 
@@ -15,7 +15,7 @@ public class DoctorsData implements Serializable {
     private int yearsOfExperience;
 
 
-    public DoctorsData() {
+    public DDoctor() {
 
     }
 

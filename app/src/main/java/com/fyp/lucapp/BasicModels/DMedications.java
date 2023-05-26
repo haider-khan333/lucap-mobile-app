@@ -2,17 +2,14 @@ package com.fyp.lucapp.BasicModels;
 
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Time;
-import java.util.ArrayList;
 
-public class Medications implements Serializable {
+public class DMedications implements Serializable {
     private String medicineName;
     private String medicineGrams;
     private String medicineDosage;
     private String medicineFrequency;
 
-    public Medications() {
+    public DMedications() {
     }
 
     public String getMedicineName() {

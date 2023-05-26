@@ -21,7 +21,7 @@ public class ComponentOngoingAppointment extends CardView {
     private TextView docSpeciality;
     private TextView docName;
     private TextView dateTiming;
-    private TextView cancelAppointment;
+//    private TextView cancelAppointment;
 
 
     public ComponentOngoingAppointment(@NonNull Context context) {
@@ -45,7 +45,7 @@ public class ComponentOngoingAppointment extends CardView {
         docSpeciality = view.findViewById(R.id.ong_docSpeciality);
         docName = view.findViewById(R.id.ong_doctorName);
         dateTiming = view.findViewById(R.id.ong_dateTime);
-        cancelAppointment = view.findViewById(R.id.ong_cancelAppointmentBtn);
+//        cancelAppointment = view.findViewById(R.id.ong_cancelAppointmentBtn);
 
         this.setBackground(null);
     }
@@ -67,9 +67,9 @@ public class ComponentOngoingAppointment extends CardView {
         this.dateTiming.setText(dateTiming);
     }
 
-    public void addOnCLickListener(OnClickListener onClickListener) {
-        cancelAppointment.setOnClickListener(onClickListener);
-    }
+//    public void addOnCLickListener(OnClickListener onClickListener) {
+//        cancelAppointment.setOnClickListener(onClickListener);
+//    }
 
 
 }

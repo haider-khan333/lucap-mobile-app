@@ -51,7 +51,7 @@ public class UpcomingAppointmentFragment extends Fragment implements
                 false);
 
         RecyclerView recyclerView = view.findViewById(R.id.upcomingAppointmentAdapter);
-        List<DAppointment> appointmentData = onlyShowOngoingAppointments();
+//        List<DAppointment> appointmentData = onlyShowOngoingAppointments();
         OngoingAdapter adapter = new OngoingAdapter(
                 appointmentData
         );
@@ -62,19 +62,20 @@ public class UpcomingAppointmentFragment extends Fragment implements
     }
 
 
-    private List<DAppointment> onlyShowOngoingAppointments() {
-        List<DAppointment> ongoingAppointments = new ArrayList<>();
-        for (DAppointment appointment : appointmentData) {
-            if (appointment.getStatus().equals("ongoing")) {
-                ongoingAppointments.add(appointment);
-            }
-        }
-        return ongoingAppointments;
-    }
+//    private List<DAppointment> onlyShowOngoingAppointments() {
+//        List<DAppointment> ongoingAppointments = new ArrayList<>();
+//        for (DAppointment appointment : appointmentData) {
+//            if (appointment.getStatus().equals("ongoing")) {
+//                ongoingAppointments.add(appointment);
+//            }
+//        }
+//        return ongoingAppointments;
+//    }
 
 
     @Override
     public void onClick(View view) {
 
     }
+
 }

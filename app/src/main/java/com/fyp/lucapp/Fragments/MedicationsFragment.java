@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.fyp.lucapp.Adapters.MedicineAdapterView;
-import com.fyp.lucapp.BasicModels.Medications;
+import com.fyp.lucapp.BasicModels.DMedications;
 import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Components.ComponentLoader;
 import com.fyp.lucapp.Helper.AlarmReceiver;
@@ -29,10 +29,14 @@ import com.fyp.lucapp.Helper.LoaderUtils;
 import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.InterfaceAlarm;
 import com.fyp.lucapp.Interface.InterfaceApi;
+import com.fyp.lucapp.Interface.InterfaceNotFound;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Routes.RouteGet;
+import com.fyp.lucapp.Routes.Url;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,14 +45,15 @@ import java.util.List;
 import java.util.Map;
 
 public class MedicationsFragment extends Fragment implements InterfaceApi,
-        InterfaceAlarm {
+        InterfaceAlarm, InterfaceNotFound {
 
     private Map<Integer, List<PendingIntent>> pendingIntentMap;
     private RecyclerView recyclerView;
-    private ArrayList<Medications> medicationsList;
+    private ArrayList<DMedications> medicationsList;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ComponentLoader componentLoader;
-    private URL url;
+    private EditText searchEditText;
+
 
     public MedicationsFragment() {
     }
@@ -71,10 +76,10 @@ public class MedicationsFragment extends Fragment implements InterfaceApi,
         recyclerView.setAdapter(new MedicineAdapterView());
         pendingIntentMap = new HashMap<>();
 
-        url = new URL(getContext(), this);
+
         swipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
-        EditText searchEditText = view.findViewById(R.id.editName);
+        searchEditText = view.findViewById(R.id.editName);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,15 +104,21 @@ public class MedicationsFragment extends Fragment implements InterfaceApi,
 
         componentLoader.setAnimation(R.raw.loader_anim);
         LoaderUtils.showLoader(componentLoader);
-        url.getMedicines();
+        loadDataFromApi();
         return view;
+    }
+
+    private void loadDataFromApi() {
+        RouteGet routeGet = new RouteGet(getContext(), this);
+        routeGet.get(Url.GET_MEDICINES + "/" + URL.LOGGED_IN_PATIENT_ID);
+
     }
 
     private void filterReports(String text) {
         boolean found = false;
-        ArrayList<Medications> filteredList = new ArrayList<>();
+        ArrayList<DMedications> filteredList = new ArrayList<>();
 
-        for (Medications item : medicationsList) {
+        for (DMedications item : medicationsList) {
             if (item.getMedicineName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
                 found = true;
@@ -130,15 +141,15 @@ public class MedicationsFragment extends Fragment implements InterfaceApi,
 
     private void refreshData() {
         if (swipeRefreshLayout.isRefreshing()) {
-            url.getMedicines();
+            loadDataFromApi();
         }
     }
 
 
-    private void setDefaultAlarm(Medications medications, int position) {
+    private void setDefaultAlarm(DMedications medications, int position) {
 
-        int medicineDosage = Integer.parseInt(medications.getMedicineDosage());
-//        int medicineDosage = 4;
+//        int medicineDosage = Integer.parseInt(medications.getMedicineDosage());
+        int medicineDosage = 4;
 
         if (medicineDosage == 1) {
             //set alarm for 1 time a day
@@ -191,8 +202,8 @@ public class MedicationsFragment extends Fragment implements InterfaceApi,
         } else {
             //set alarm for current time
             Calendar calender = Calendar.getInstance();
-            calender.set(Calendar.HOUR_OF_DAY, 23);
-            calender.set(Calendar.MINUTE, 3);
+            calender.set(Calendar.HOUR_OF_DAY, 11);
+            calender.set(Calendar.MINUTE, 49);
             calender.set(Calendar.SECOND, 0);
 
             List<Calendar> calendarList = new ArrayList<>();
@@ -296,15 +307,29 @@ public class MedicationsFragment extends Fragment implements InterfaceApi,
     }
 
     @Override
-    public void onSuccess(Object object) {
+    public void onSuccess(JSONObject response) {
         LoaderUtils.hideLoader(componentLoader);
-        JSONArray medicineList = (JSONArray) object;
-        medicationsList = Helper.getMedicines(medicineList);
 
-        MedicineAdapterView adapterView = new MedicineAdapterView(medicationsList,
-                this);
-        recyclerView.setAdapter(adapterView);
-        adapterView.notifyDataSetChanged();
+        try {
+            int statusCode = response.optInt("status_code");
+            if (statusCode == 200) {
+                JSONArray medicinesJsonList = response.getJSONArray("medicine_list");
+                medicationsList = Helper.getMedicines(medicinesJsonList);
+
+                MedicineAdapterView adapterView = new MedicineAdapterView(medicationsList,
+                        this);
+                recyclerView.setAdapter(adapterView);
+                adapterView.notifyDataSetChanged();
+
+            } else {
+                Toast.makeText(getContext(), "No medicines found", Toast.LENGTH_SHORT).show();
+            }
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
 
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
@@ -329,7 +354,7 @@ public class MedicationsFragment extends Fragment implements InterfaceApi,
     public void OnClick(View view, int position, Object object) {
         switch (view.getId()) {
             case R.id.add_alarm:
-                Medications medications = (Medications) object;
+                DMedications medications = (DMedications) object;
                 setDefaultAlarm(medications, position);
                 break;
             case R.id.cancel_alarm:
@@ -339,6 +364,18 @@ public class MedicationsFragment extends Fragment implements InterfaceApi,
                 showBottomSheet();
                 break;
         }
+
+    }
+
+    @Override
+    public void notFound() {
+        LoaderUtils.hideLoader(componentLoader);
+        componentLoader.setAnimation(R.raw.not_found_anim);
+        LoaderUtils.showLoader(componentLoader);
+
+        //disable the search button
+        searchEditText.setEnabled(false);
+
 
     }
 }

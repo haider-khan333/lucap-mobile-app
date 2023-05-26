@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     tools:context=".Fragments.SettingsFragment">
 
@@ -13,7 +12,8 @@
         android:id="@+id/component_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/medical_blue" />
+        android:background="@color/medical_blue"
+        android:paddingTop="30dp" />
 
 
     <androidx.recyclerview.widget.RecyclerView

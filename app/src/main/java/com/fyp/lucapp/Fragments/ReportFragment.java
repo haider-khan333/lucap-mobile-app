@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -16,8 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.fyp.lucapp.Adapters.ReportsAdapterView;
-import com.fyp.lucapp.BasicModels.ReportData;
-import com.fyp.lucapp.Components.ComponentCustomDialogue;
+import com.fyp.lucapp.BasicModels.DReport;
 import com.fyp.lucapp.Components.ComponentLoader;
 import com.fyp.lucapp.Helper.DocumentUtils;
 import com.fyp.lucapp.Helper.Helper;
@@ -26,16 +26,20 @@ import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.Interface.InterfaceClickItem;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Routes.RouteGet;
+import com.fyp.lucapp.Routes.Url;
+import com.fyp.lucapp.Utils.UtilsDialogue;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class ReportFragment extends Fragment implements InterfaceApi, InterfaceClickItem {
     private RecyclerView recyclerView;
-    private URL url;
-    private ArrayList<ReportData> reportDataList;
+
+    private ArrayList<DReport> reportDataList;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ComponentLoader componentLoader;
@@ -62,7 +66,7 @@ public class ReportFragment extends Fragment implements InterfaceApi, InterfaceC
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_medical_report, container,
                 false);
-        url = new URL(getContext(), this);
+
         recyclerView = view.findViewById(R.id.reportRecyclerView);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         componentLoader = view.findViewById(R.id.fpComponentLoader);
@@ -98,27 +102,42 @@ public class ReportFragment extends Fragment implements InterfaceApi, InterfaceC
 
         componentLoader.setAnimation(R.raw.loader_anim);
         LoaderUtils.showLoader(componentLoader);
-        url.getReports();
+        loadDataFromApi();
         return view;
+    }
+
+
+    private void loadDataFromApi() {
+        RouteGet routeGet = new RouteGet(getContext(), this);
+        routeGet.get(Url.GET_REPORTS + "/" + URL.LOGGED_IN_PATIENT_ID);
+
     }
 
     private void refreshData() {
         if (swipeRefreshLayout.isRefreshing()) {
-            url.getReports();
+            loadDataFromApi();
         }
     }
 
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void onSuccess(Object object) {
+    public void onSuccess(JSONObject response) {
         LoaderUtils.hideLoader(componentLoader);
-        JSONArray reportList = (JSONArray) object;
-        reportDataList = Helper.getReportList(reportList);
-        ReportsAdapterView reportsAdapterView = new ReportsAdapterView(reportDataList,
-                this);
-        recyclerView.setAdapter(reportsAdapterView);
-        reportsAdapterView.notifyDataSetChanged();
+
+        try {
+            JSONArray reportList = response.getJSONArray("report_list");
+            reportDataList = Helper.getReportList(reportList);
+            ReportsAdapterView reportsAdapterView = new ReportsAdapterView(reportDataList,
+                    this);
+            recyclerView.setAdapter(reportsAdapterView);
+            reportsAdapterView.notifyDataSetChanged();
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
 
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
@@ -130,8 +149,8 @@ public class ReportFragment extends Fragment implements InterfaceApi, InterfaceC
     @SuppressLint("NotifyDataSetChanged")
     public void filterReports(String text) {
         boolean found = false;
-        ArrayList<ReportData> filteredList = new ArrayList<>();
-        for (ReportData item : reportDataList) {
+        ArrayList<DReport> filteredList = new ArrayList<>();
+        for (DReport item : reportDataList) {
             String name = item.getDoctorName().toLowerCase();
             String speciality = item.getDoctorSpeciality().toLowerCase();
 
@@ -156,18 +175,14 @@ public class ReportFragment extends Fragment implements InterfaceApi, InterfaceC
     @Override
     public void onError(Object message) {
         LoaderUtils.hideLoader(componentLoader);
-        ComponentCustomDialogue componentCustomDialogue = new ComponentCustomDialogue
-                (getContext(),
-                        "Invalid request", message.toString(),
-                        R.raw.cancel_animation);
-        componentCustomDialogue.onShow();
+        UtilsDialogue.showErrorDialogue(message.toString(), getContext());
 
     }
 
     @Override
     public void onItemClicked(int position) {
         System.out.println("Item clicked  + " + position);
-        ReportData reportDetails = reportDataList.get(position);
+        DReport reportDetails = reportDataList.get(position);
         boolean flag = DocumentUtils.createPDF(reportDetails, getContext());
         if (flag) {
             Snackbar.make(getView(), "Report saved successfully", Snackbar.LENGTH_LONG).show();

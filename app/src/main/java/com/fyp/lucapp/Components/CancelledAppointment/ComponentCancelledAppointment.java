@@ -22,7 +22,7 @@ public class ComponentCancelledAppointment extends CardView {
     private TextView docSpeciality;
     private TextView docName;
 
-    private LinearLayout reason;
+//    private LinearLayout reason;
 
 
     public ComponentCancelledAppointment(@NonNull Context context) {
@@ -45,7 +45,7 @@ public class ComponentCancelledAppointment extends CardView {
         docImage = view.findViewById(R.id.can_docImage);
         docSpeciality = view.findViewById(R.id.can_docSpeciality);
         docName = view.findViewById(R.id.can_doctorName);
-        reason = view.findViewById(R.id.can_info);
+//        reason = view.findViewById(R.id.can_info);
 
         this.setBackground(null);
     }
@@ -64,9 +64,9 @@ public class ComponentCancelledAppointment extends CardView {
     }
 
 
-    public void addOnCLickListener(OnClickListener onClickListener) {
-        reason.setOnClickListener(onClickListener);
-    }
+//    public void addOnCLickListener(OnClickListener onClickListener) {
+//        reason.setOnClickListener(onClickListener);
+//    }
 
 
 }

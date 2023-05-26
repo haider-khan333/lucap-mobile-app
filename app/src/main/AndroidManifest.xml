@@ -27,13 +27,10 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".Views.DoctorDetailsActivity"
+            android:name=".Views.DoctorDetails.DoctorDetailsActivity"
             android:parentActivityName=".Main" />
 
 
-        <activity
-            android:name=".Views.CalenderActivity"
-            android:parentActivityName=".Views.DoctorDetailsActivity" />
 
         <activity
             android:name=".Main"
@@ -71,9 +68,11 @@
             android:name=".Views.Settings.EditProfileActivity"
             android:parentActivityName=".Main" />
 
-        <!--        <activity-->
-        <!--            android:name=".Views.LoginActivity"-->
-        <!--            android:parentActivityName=".Views.SplashActivity" />-->
+
+
+<!--                <activity-->
+<!--                    android:name=".Views.LoginActivity"-->
+<!--                    android:parentActivityName=".Views.SplashActivity" />-->
 
 
         <activity
@@ -85,14 +84,14 @@
             </intent-filter>
         </activity>
 
-        <!--        <activity-->
-        <!--            android:name=".Views.SplashActivity"-->
-        <!--            android:exported="true">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.MAIN" />-->
-        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
+<!--                <activity-->
+<!--                    android:name=".Views.SplashActivity"-->
+<!--                    android:exported="true">-->
+<!--                    <intent-filter>-->
+<!--                        <action android:name="android.intent.action.MAIN" />-->
+<!--                        <category android:name="android.intent.category.LAUNCHER" />-->
+<!--                    </intent-filter>-->
+<!--                </activity>-->
 
         <receiver android:name=".Helper.AlarmReceiver" />
 

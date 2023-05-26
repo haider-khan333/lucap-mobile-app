@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.fyp.lucapp.Components.ViewProfile.ComponentViewProfileFields
+        android:id="@+id/cmp_vpEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" />
+
+    <com.fyp.lucapp.Components.ViewProfile.ComponentViewProfileFields
+        android:id="@+id/cmp_vpContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" />
+
+     
+
+
+</LinearLayout>

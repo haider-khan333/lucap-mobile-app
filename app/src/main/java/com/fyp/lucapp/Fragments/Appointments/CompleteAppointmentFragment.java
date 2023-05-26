@@ -48,7 +48,7 @@ public class CompleteAppointmentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_complete_appointment, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.completeAppointmentAdapter);
 
-        List<DAppointment> appointmentData = onlyShowCompleteAppointments();
+//        List<DAppointment> appointmentData = onlyShowCompleteAppointments();
 
         CompletedAdapter adapter = new CompletedAdapter(
                 appointmentData
@@ -60,7 +60,7 @@ public class CompleteAppointmentFragment extends Fragment {
     private List<DAppointment> onlyShowCompleteAppointments() {
         List<DAppointment> completedAppointments = new ArrayList<>();
         for (DAppointment appointment : appointmentData) {
-            if (appointment.getStatus().equals("complete")) {
+            if (appointment.getStatus().equals("completed")) {
                 completedAppointments.add(appointment);
             }
         }

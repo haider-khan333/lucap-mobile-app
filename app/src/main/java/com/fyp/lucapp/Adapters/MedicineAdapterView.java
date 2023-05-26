@@ -7,9 +7,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fyp.lucapp.BasicModels.Medications;
+import com.fyp.lucapp.BasicModels.DMedications;
 import com.fyp.lucapp.Components.ComponentMedicine;
 import com.fyp.lucapp.Interface.InterfaceAlarm;
+import com.fyp.lucapp.Interface.InterfaceNotFound;
 import com.fyp.lucapp.R;
 
 import java.util.ArrayList;
@@ -17,14 +18,15 @@ import java.util.ArrayList;
 public class MedicineAdapterView extends RecyclerView.Adapter
         <MedicineAdapterView.MedicineViewHolder> {
 
-    private ArrayList<Medications> medicationList;
+    private ArrayList<DMedications> medicationList;
+
     private InterfaceAlarm interfaceAlarm;
 
 
     public MedicineAdapterView() {
     }
 
-    public MedicineAdapterView(ArrayList<Medications> medicationList
+    public MedicineAdapterView(ArrayList<DMedications> medicationList
             , InterfaceAlarm interfaceAlarm) {
         this.medicationList = medicationList;
         this.interfaceAlarm = interfaceAlarm;
@@ -41,7 +43,7 @@ public class MedicineAdapterView extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(@NonNull MedicineAdapterView.MedicineViewHolder holder,
                                  int position) {
-        Medications medication = medicationList.get(position);
+        DMedications medication = medicationList.get(position);
         holder.componentMedicine.setMedicineName(medication.getMedicineName());
         holder.componentMedicine.setMedicineGrams(medication.getMedicineGrams() + "mg");
         holder.componentMedicine.setMedicineFrequency("For " + medication.getMedicineFrequency()
@@ -61,8 +63,10 @@ public class MedicineAdapterView extends RecyclerView.Adapter
 
     @Override
     public int getItemCount() {
-        if (medicationList == null)
+        if (medicationList == null) {
             return 0;
+        }
+
         return medicationList.size();
     }
 

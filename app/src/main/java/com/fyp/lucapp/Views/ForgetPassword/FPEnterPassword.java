@@ -6,17 +6,22 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Components.ComponentLoader;
 import com.fyp.lucapp.Helper.LoaderUtils;
 import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Routes.RoutePut;
+import com.fyp.lucapp.Routes.Url;
 import com.fyp.lucapp.Schemas.EditPasswordSchema;
+import com.fyp.lucapp.Utils.UtilsDialogue;
 import com.fyp.lucapp.Views.LoginActivity;
+
+import org.json.JSONObject;
 
 public class FPEnterPassword extends AppCompatActivity implements InterfaceApi {
     private EditText txtPassword;
@@ -64,13 +69,29 @@ public class FPEnterPassword extends AppCompatActivity implements InterfaceApi {
             txtConfirmPassword.setEnabled(false);
             loader.setAnimation(R.raw.loader_anim);
             LoaderUtils.showLoader(loader);
-            url = new URL(this, this);
+
 
             EditPasswordSchema schema = new EditPasswordSchema();
             schema.setNewPassword(txtPassword.getText().toString());
 
-            url.updatePassword(schema);
+            loadDataFromApi(schema);
         });
+
+
+    }
+
+    private void loadDataFromApi(EditPasswordSchema schema) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("new_password", schema.getNewPassword());
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+        }
+
+        RoutePut routePut = new RoutePut(this, this);
+        routePut.put(Url.EDIT_PASSWORD + "/" + URL.LOGGED_IN_PATIENT_ID, jsonObject);
 
 
     }
@@ -86,11 +107,26 @@ public class FPEnterPassword extends AppCompatActivity implements InterfaceApi {
     }
 
     @Override
-    public void onSuccess(Object object) {
-        LoaderUtils.hideLoader(loader);
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+    public void onSuccess(JSONObject response) {
+
+        try {
+            int statusCode = response.optInt("status_code");
+            if (statusCode == 200) {
+                LoaderUtils.hideLoader(loader);
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, "System: Error changing password ",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+            UtilsDialogue.showErrorDialogue(e.getMessage(), this);
+        }
+
 
     }
 
@@ -101,11 +137,10 @@ public class FPEnterPassword extends AppCompatActivity implements InterfaceApi {
         txtConfirmPassword.setEnabled(true);
         LoaderUtils.hideLoader(loader);
 
-        ComponentCustomDialogue dialogue = new ComponentCustomDialogue(this,
-                "Error", message.toString(), R.raw.cancel_animation);
-        dialogue.onShow();
+        UtilsDialogue.showErrorDialogue(message.toString(), this);
 
 
     }
+
 
 }

@@ -1,6 +1,6 @@
 package com.fyp.lucapp.Schemas;
 
-public class EditPasswordSchema {
+public class EditPasswordSchema  {
     private String newPassword;
 
     public EditPasswordSchema(String newPassword) {

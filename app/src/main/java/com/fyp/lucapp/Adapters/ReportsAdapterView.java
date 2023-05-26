@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fyp.lucapp.BasicModels.ReportData;
+import com.fyp.lucapp.BasicModels.DReport;
 import com.fyp.lucapp.Components.ComponentReport;
 import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Interface.InterfaceClickItem;
@@ -17,13 +17,13 @@ import java.util.ArrayList;
 
 public class ReportsAdapterView extends RecyclerView.Adapter<ReportsAdapterView.ReportCardView> {
 
-    private ArrayList<ReportData> reportData;
+    private ArrayList<DReport> reportData;
     private InterfaceClickItem interfaceClickItem;
 
     public ReportsAdapterView() {
     }
 
-    public ReportsAdapterView(ArrayList<ReportData> reportData
+    public ReportsAdapterView(ArrayList<DReport> reportData
             , InterfaceClickItem interfaceClickItem) {
         this.reportData = reportData;
         this.interfaceClickItem = interfaceClickItem;
@@ -40,8 +40,8 @@ public class ReportsAdapterView extends RecyclerView.Adapter<ReportsAdapterView.
 
     @Override
     public void onBindViewHolder(@NonNull ReportsAdapterView.ReportCardView holder, int position) {
-        ReportData report = reportData.get(position);
-        holder.reportComponent.setDate(Helper.getFormattedDate(report.getDate()));
+        DReport report = reportData.get(position);
+        holder.reportComponent.setDate("25 May, 2023");
         holder.reportComponent.setDoctorDetails(report.getDoctorName() + " - " +
                 report.getDoctorSpeciality());
         holder.reportComponent.setOnClickListener(v -> interfaceClickItem.onItemClicked(position));

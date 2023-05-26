@@ -17,19 +17,21 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.fyp.lucapp.Adapters.DoctorListAdapterView;
 import com.fyp.lucapp.Adapters.MainCardAdapter;
-import com.fyp.lucapp.BasicModels.DoctorsData;
-import com.fyp.lucapp.BasicModels.MainCardData;
+import com.fyp.lucapp.BasicModels.DDoctor;
+import com.fyp.lucapp.BasicModels.DMainCard;
 import com.fyp.lucapp.Components.ComponentLoader;
 import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.LoaderUtils;
 import com.fyp.lucapp.Helper.Store;
-import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.Interface.InterfaceClickItem;
 import com.fyp.lucapp.R;
-import com.fyp.lucapp.Views.DoctorDetailsActivity;
+import com.fyp.lucapp.Routes.RouteGet;
+import com.fyp.lucapp.Routes.Url;
+import com.fyp.lucapp.Views.DoctorDetails.DoctorDetailsActivity;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +41,10 @@ public class DoctorsFragment extends Fragment implements InterfaceClickItem, Int
 
     private RecyclerView recyclerView;
     private ComponentLoader componentLoader;
-    private ArrayList<DoctorsData> docList;
+    private ArrayList<DDoctor> docList;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private URL url;
+
+    private RouteGet routeGet;
 
     public DoctorsFragment() {
     }
@@ -51,7 +54,8 @@ public class DoctorsFragment extends Fragment implements InterfaceClickItem, Int
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_doctor_list, container, false);
 
-        url = new URL(getContext(), this);
+
+        routeGet = new RouteGet(getContext(), this);
         componentLoader = view.findViewById(R.id.fpComponentLoader);
         recyclerView = view.findViewById(R.id.doctorRecyclerView);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
@@ -86,16 +90,16 @@ public class DoctorsFragment extends Fragment implements InterfaceClickItem, Int
 
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        List<MainCardData> mainCardDataList = new ArrayList<>();
+        List<DMainCard> mainCardDataList = new ArrayList<>();
 
 
-        mainCardDataList.add(new MainCardData(0, "Book Appointment", "Quickly " +
+        mainCardDataList.add(new DMainCard(0, "Book Appointment", "Quickly " +
                 "create an appointment with your doctor", "Book Now",
                 R.mipmap.appointment_pic_foreground));
-        mainCardDataList.add(new MainCardData(1, "See Reports", "Now you can view and " +
+        mainCardDataList.add(new DMainCard(1, "See Reports", "Now you can view and " +
                 "download your medical reports.", "View " +
                 "Reports", R.mipmap.report_pic_foreground));
-        mainCardDataList.add(new MainCardData(2, "View Prescriptions",
+        mainCardDataList.add(new DMainCard(2, "View Prescriptions",
                 "Now you can view your prescriptions " +
                         "provided by your doctor.", "View " +
                 "Prescriptions", R.mipmap.prescriptions_pic_foreground));
@@ -105,20 +109,22 @@ public class DoctorsFragment extends Fragment implements InterfaceClickItem, Int
         recyclerView.setAdapter(adapter);
         componentLoader.setAnimation(R.raw.loader_anim);
         LoaderUtils.showLoader(componentLoader);
-        url.getDoctors();
+
+
+        routeGet.get(Url.GET_DOCTORS);
         return view;
     }
 
     private void refreshData() {
         if (swipeRefreshLayout.isRefreshing()) {
-            url.getDoctors();
+            routeGet.get(Url.GET_DOCTORS);
         }
     }
 
     public void filterDoctors(String text) {
         boolean found = false;
-        ArrayList<DoctorsData> filteredList = new ArrayList<>();
-        for (DoctorsData item : docList) {
+        ArrayList<DDoctor> filteredList = new ArrayList<>();
+        for (DDoctor item : docList) {
             String name = item.getUsername().toLowerCase();
             String speciality = item.getSpeciality().toLowerCase();
 
@@ -142,15 +148,24 @@ public class DoctorsFragment extends Fragment implements InterfaceClickItem, Int
 
 
     @Override
-    public void onSuccess(Object object) {
-        //on getting data from api, set the data to adapter and notify the adapter
-        LoaderUtils.hideLoader(componentLoader);
-        JSONArray jsonArray = (JSONArray) object;
-        docList = Helper.getDoctors(jsonArray);
-        DoctorListAdapterView doctorListAdapter = new DoctorListAdapterView(docList,
-                this);
-        recyclerView.setAdapter(doctorListAdapter);
-        doctorListAdapter.notifyDataSetChanged();
+    public void onSuccess(JSONObject response) {
+
+        try {
+            JSONArray doctorsJsonList = response.getJSONArray("doctors_list");
+            //on getting data from api, set the data to adapter and notify the adapter
+            LoaderUtils.hideLoader(componentLoader);
+            docList = Helper.getDoctors(doctorsJsonList);
+            DoctorListAdapterView doctorListAdapter = new DoctorListAdapterView(docList,
+                    this);
+            recyclerView.setAdapter(doctorListAdapter);
+            doctorListAdapter.notifyDataSetChanged();
+
+
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
@@ -163,7 +178,6 @@ public class DoctorsFragment extends Fragment implements InterfaceClickItem, Int
     public void onError(Object message) {
         LoaderUtils.hideLoader(componentLoader);
         Toast.makeText(getContext(), (String) message, Toast.LENGTH_SHORT).show();
-
 
 
     }
@@ -189,7 +203,7 @@ public class DoctorsFragment extends Fragment implements InterfaceClickItem, Int
     public void onItemClicked(int position) {
         Intent intent = new Intent(getActivity(), DoctorDetailsActivity.class);
         Bundle bundle = new Bundle();
-        DoctorsData doctorsData = docList.get(position);
+        DDoctor doctorsData = docList.get(position);
         bundle.putSerializable("doctor", doctorsData);
         intent.putExtras(bundle);
         startActivity(intent);

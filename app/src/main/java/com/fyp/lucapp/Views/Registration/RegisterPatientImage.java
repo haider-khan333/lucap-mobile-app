@@ -17,21 +17,25 @@ import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Components.ComponentLoader;
 import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.LoaderUtils;
-import com.fyp.lucapp.Helper.URL;
-import com.fyp.lucapp.Interface.RegisterCallback;
+import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Routes.RoutePost;
+import com.fyp.lucapp.Routes.Url;
 import com.fyp.lucapp.Schemas.RegisterPatientSchema;
+import com.fyp.lucapp.Utils.UtilsDialogue;
 import com.fyp.lucapp.Views.LoginActivity;
+
+import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RegisterPatientImage extends AppCompatActivity implements RegisterCallback {
+public class RegisterPatientImage extends AppCompatActivity implements InterfaceApi {
 
     private final int SELECT_PICTURE = 200;
     private Bitmap selectedImage;
     private ComponentLoader componentLoader;
     private TextView age;
-    private URL url;
+
 
     private CircleImageView userImage;
     private Button nextButton;
@@ -41,7 +45,6 @@ public class RegisterPatientImage extends AppCompatActivity implements RegisterC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_image);
 
-        url = new URL(this, this);
 
         //get intents from previous activity
         Intent intent = getIntent();
@@ -80,10 +83,9 @@ public class RegisterPatientImage extends AppCompatActivity implements RegisterC
         nextButton.setOnClickListener(e -> {
 
             if (selectedImage == null) {
-                ComponentCustomDialogue componentCustomDialogue = new ComponentCustomDialogue(this,
-                        "Image Alert!", "Please upload an image before proceeding",
-                        R.raw.cancel_animation);
-                componentCustomDialogue.onShow();
+                Toast.makeText(this, "Please upload an image before proceeding",
+                        Toast.LENGTH_SHORT).show();
+
             } else {
                 String base64 = Helper.convertBitmapToBase64(selectedImage);
                 int age = Integer.parseInt(this.age.getText().toString());
@@ -95,11 +97,34 @@ public class RegisterPatientImage extends AppCompatActivity implements RegisterC
                 componentLoader.setAnimation(R.raw.loader_anim);
                 LoaderUtils.showLoader(componentLoader);
                 nextButton.setEnabled(false);
-                url.registerPatient(register);
+
+                loadDataFromApi(register);
             }
 
 
         });
+
+    }
+
+    private void loadDataFromApi(RegisterPatientSchema register) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("email", register.getPatientEmail());
+            jsonObject.put("password", register.getPatientPassword());
+            jsonObject.put("username", register.getPatientName());
+            jsonObject.put("phone", register.getPatientContact());
+            jsonObject.put("image", register.getPatientImage());
+            jsonObject.put("age", register.getPatientAge());
+            jsonObject.put("gender", register.getPatientGender());
+
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+        }
+
+        RoutePost routePost = new RoutePost(this, this);
+        routePost.post(Url.PATIENT_REGISTER, jsonObject);
+
 
     }
 
@@ -165,8 +190,10 @@ public class RegisterPatientImage extends AppCompatActivity implements RegisterC
 
     }
 
+
     @Override
-    public void onSuccess() {
+    public void onSuccess(JSONObject response) {
+
         LoaderUtils.hideLoader(componentLoader);
         nextButton.setEnabled(true);
         Intent intent = new Intent(this, LoginActivity.class);
@@ -179,10 +206,7 @@ public class RegisterPatientImage extends AppCompatActivity implements RegisterC
     public void onError(Object message) {
         LoaderUtils.hideLoader(componentLoader);
         nextButton.setEnabled(true);
-        ComponentCustomDialogue componentCustomDialogue = new
-                ComponentCustomDialogue(this, "Error", message.toString()
-                , R.raw.cancel_animation);
-        componentCustomDialogue.onShow();
+        UtilsDialogue.showErrorDialogue(message.toString(),this);
 
     }
 

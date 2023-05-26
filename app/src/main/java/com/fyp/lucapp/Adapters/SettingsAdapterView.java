@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fyp.lucapp.BasicModels.SettingsData;
+import com.fyp.lucapp.BasicModels.DSettings;
 import com.fyp.lucapp.Components.ComponentSettingsCard;
 import com.fyp.lucapp.Helper.Store;
 import com.fyp.lucapp.R;
@@ -17,10 +17,10 @@ import java.util.List;
 public class SettingsAdapterView extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final View.OnClickListener onClickListener;
-    private final List<SettingsData> settingsData;
+    private final List<DSettings> settingsData;
 
 
-    public SettingsAdapterView(View.OnClickListener onClickListener, List<SettingsData> settingsData) {
+    public SettingsAdapterView(View.OnClickListener onClickListener, List<DSettings> settingsData) {
         this.onClickListener = onClickListener;
         this.settingsData = settingsData;
     }
@@ -28,7 +28,7 @@ public class SettingsAdapterView extends RecyclerView.Adapter<RecyclerView.ViewH
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == SettingsData.VIEW_TYPE_SETTING) {
+        if (viewType == DSettings.VIEW_TYPE_SETTING) {
             return new SettingsCardView(LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.item_setting_card, parent, false));
         } else {
@@ -46,7 +46,7 @@ public class SettingsAdapterView extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        SettingsData setting = settingsData.get(position);
+        DSettings setting = settingsData.get(position);
 
         if (holder instanceof SettingsCardView) {
             if (setting.getId() == 0) {

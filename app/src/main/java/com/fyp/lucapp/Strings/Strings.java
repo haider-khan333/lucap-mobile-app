@@ -6,7 +6,6 @@ public class Strings {
     public static String NOTIFICATIONS = "Notifications";
     public static String APPOINTMENTS = "Appointment";
     public static String HELP_CENTER = "Help Center";
-    public static String ABOUT_US = "About Us";
     public static String GALLERY = "Gallery";
     public static String LOGOUT = "Logout";
 

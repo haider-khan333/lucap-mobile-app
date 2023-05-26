@@ -18,13 +18,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.fyp.lucapp.BasicModels.Patient;
-import com.fyp.lucapp.Components.ComponentCustomDialogue;
+import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.Store;
-import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Routes.RoutePost;
+import com.fyp.lucapp.Routes.Url;
 import com.fyp.lucapp.Schemas.SendMailSchema;
+import com.fyp.lucapp.Utils.UtilsDialogue;
+
+import org.json.JSONObject;
 
 public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
 
@@ -40,7 +43,6 @@ public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
     private TextView instructionsTextView;
     private TextView fpResendCode;
     private TextView fpEmailText;
-    private Patient patient;
     private int uniqueCode = -1;
 
     @Override
@@ -56,14 +58,9 @@ public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
         txtCode5 = findViewById(R.id.editText5);
         txtCode6 = findViewById(R.id.editText6);
 
-        URL url = new URL(this, this);
-
         instructionsTextView = findViewById(R.id.fpInstructions);
         fpResendCode = findViewById(R.id.fpResendCode);
         fpEmailText = findViewById(R.id.fpEmailBox);
-
-        patient = (Patient) getIntent().getSerializableExtra("patient");
-        URL.LOGGED_IN_PATIENT_ID = patient.getPatientId();
 
         String text = "Didn't receive the OTP? ";
         String resendOtpText = "RESEND OTP";
@@ -83,7 +80,9 @@ public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
 
         fpResendCode.setText(spannableStringBuilder);
 
-        String email = patient.getPatientEmail();
+
+        String email = Helper.getSavedUser(this).getPatientEmail();
+        System.out.println("email: " + email);
         fpEmailText.setText(email);
 
         SendMailSchema sendMailSchema = new SendMailSchema();
@@ -93,13 +92,32 @@ public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
         txtCode1.requestFocus();
 
 
-        url.sendMail(sendMailSchema);
+        loadDataFromApi(sendMailSchema);
+
+
         fpResendCode.setOnClickListener(view -> {
-            url.sendMail(sendMailSchema);
+            loadDataFromApi(sendMailSchema);
             startCountDownTimer();
             Toast.makeText(FPEnterCode.this, "OTP sent", Toast.LENGTH_SHORT).show();
 
         });
+
+
+    }
+
+    private void loadDataFromApi(SendMailSchema sendMailSchema) {
+        RoutePost routePost = new RoutePost(this, this);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("from_email", sendMailSchema.getFromEmail());
+            jsonObject.put("to_email", sendMailSchema.getToEmail());
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+        }
+
+        routePost.post(Url.SEND_MAIL, jsonObject);
 
 
     }
@@ -175,16 +193,28 @@ public class FPEnterCode extends AppCompatActivity implements InterfaceApi {
     }
 
     @Override
-    public void onSuccess(Object object) {
-        uniqueCode = (int) object;
+    public void onSuccess(JSONObject response) {
+
+        try {
+            int statusCode = response.optInt("status_code");
+            if (statusCode == 202) {
+                uniqueCode = response.optInt("code");
+            } else {
+                Toast.makeText(this, "Error sending mail", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch
+        (Exception e) {
+            e.printStackTrace();
+            UtilsDialogue.showErrorDialogue(e.toString(), this);
+        }
+
 
     }
 
     @Override
     public void onError(Object message) {
-        ComponentCustomDialogue componentCustomDialogue = new ComponentCustomDialogue(this,
-                "Error", message.toString(), R.raw.cancel_animation);
-        componentCustomDialogue.onShow();
+        UtilsDialogue.showErrorDialogue(message.toString(), this);
 
     }
 

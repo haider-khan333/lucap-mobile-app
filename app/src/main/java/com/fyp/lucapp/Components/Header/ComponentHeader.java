@@ -48,5 +48,13 @@ public class ComponentHeader extends LinearLayout {
         this.backButton.setOnClickListener(onClickListener);
     }
 
+    public void setBackButtonColor(int color) {
+        this.backButton.setColorFilter(color);
+    }
+
+    public void setTitleColor(int color) {
+        this.title.setTextColor(color);
+    }
+
 
 }

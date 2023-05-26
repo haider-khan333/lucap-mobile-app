@@ -51,6 +51,7 @@ public class CanceledAdapter extends RecyclerView.Adapter<CanceledAdapter.Cancel
             return appointments.size();
         } else {
             System.out.println("size Canceled 0");
+
             return 0;
         }
     }

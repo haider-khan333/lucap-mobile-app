@@ -55,29 +55,6 @@ public class Main extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-//            drawerLayout.closeDrawer(GravityCompat.START);
-//        } else {
-//            //ask for logout
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Logout");
-//            builder.setMessage("Are you sure you want to logout?");
-//            builder.setPositiveButton("Yes", (dialog, which) -> {
-//                //got login activity
-//                Intent intent = new Intent(this, LoginActivity.class);
-//                startActivity(intent);
-//                finish();
-//            });
-//            builder.setNegativeButton("No", (dialog, which) -> {
-//                //do nothing
-//            });
-//            builder.show();
-//
-//        }
-//    }
-
     public void loadFragment(Fragment fragment, int flag) {
         if (flag == 1) {
             getSupportFragmentManager().beginTransaction().add(R.id.container,

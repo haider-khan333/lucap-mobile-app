@@ -1,13 +1,13 @@
 package com.fyp.lucapp.BasicModels;
 
-public class MainCardData {
+public class DMainCard {
     private String heading;
     private int ID;
     private String subHeading;
     private String buttonText;
     private int imageResId;
 
-    public MainCardData(int ID,String heading, String subHeading, String buttonText, int imageResId) {
+    public DMainCard(int ID, String heading, String subHeading, String buttonText, int imageResId) {
         this.heading = heading;
         this.ID = ID;
         this.subHeading = subHeading;

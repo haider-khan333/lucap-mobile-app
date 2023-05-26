@@ -9,20 +9,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyp.lucapp.Interface.AdapterInterface;
-import com.fyp.lucapp.BasicModels.Reviews;
+import com.fyp.lucapp.BasicModels.DReviews;
 import com.fyp.lucapp.databinding.ReviewsViewBinding;
 
 import java.util.List;
 
 public class ReviewListAdapterView extends RecyclerView.Adapter<ReviewListAdapterView.ViewHolder> {
-    private List<Reviews> mValues;
+    private List<DReviews> mValues;
     private AdapterInterface adapterInterface;
 
     public ReviewListAdapterView() {
 
     }
 
-    public ReviewListAdapterView(List<Reviews> items
+    public ReviewListAdapterView(List<DReviews> items
             , AdapterInterface adapterInterface) {
         mValues = items;
         this.adapterInterface = adapterInterface;

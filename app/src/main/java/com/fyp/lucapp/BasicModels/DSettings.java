@@ -1,6 +1,6 @@
 package com.fyp.lucapp.BasicModels;
 
-public class SettingsData {
+public class DSettings {
 
     private String settingTitle;
     private int id;
@@ -9,14 +9,14 @@ public class SettingsData {
     public static final int VIEW_TYPE_DIVIDER = 1;
     private int viewType;
 
-    public SettingsData(int id, int viewType, String settingTitle) {
+    public DSettings(int id, int viewType, String settingTitle) {
         this.settingTitle = settingTitle;
         this.id = id;
         this.viewType = viewType;
 
     }
 
-    public SettingsData(int viewType) {
+    public DSettings(int viewType) {
         this.viewType = viewType;
     }
 

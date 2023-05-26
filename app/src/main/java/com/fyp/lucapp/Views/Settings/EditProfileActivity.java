@@ -1,7 +1,6 @@
 package com.fyp.lucapp.Views.Settings;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fyp.lucapp.BasicModels.Patient;
+import com.fyp.lucapp.BasicModels.DPatient;
 import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Components.ComponentLoader;
 import com.fyp.lucapp.Components.ComponentTextView;
@@ -26,6 +25,11 @@ import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Routes.RoutePut;
+import com.fyp.lucapp.Routes.Url;
+import com.fyp.lucapp.Utils.UtilsDialogue;
+
+import org.json.JSONObject;
 
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener,
         TextWatcher, InterfaceApi {
@@ -48,9 +52,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     private Bitmap selectedImage;
 
-    private Patient patient;
-
-    private URL url;
+    private DPatient patient;
 
 
     @Override
@@ -78,30 +80,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         phoneNumber.addOnTextWatcher(this);
         age.addOnTextWatcher(this);
 
-        url = new URL(this, this);
-
 
         updateButton.setEnabled(false);
+        updateButton.setOnClickListener(this);
 
 
         //get the user details from shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("userDetail", MODE_PRIVATE);
-        String id = sharedPreferences.getString("userID", "");
-        String userName = sharedPreferences.getString("userName", "");
-        String email = sharedPreferences.getString("userEmail", "");
-        String phone = sharedPreferences.getString("userPhone", "");
-        String image = sharedPreferences.getString("userImage", "");
-        String gender = sharedPreferences.getString("userGender", "");
-        String age = sharedPreferences.getString("userAge", "");
-
-        patient = new Patient();
-        patient.setPatientId(id);
-        patient.setPatientName(userName);
-        patient.setPatientEmail(email);
-        patient.setPatientContact(phone);
-        patient.setPatientImage(image);
-        patient.setPatientGender(gender);
-        patient.setPatientAge(Integer.parseInt(age));
+        patient = Helper.getSavedUser(this);
 
         setTextViewLabel();
         setTextViewValues();
@@ -121,12 +106,20 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private void setTextViewValues() {
         String fullName = patient.getPatientName();
         String[] name = fullName.split(" ");
-        firstName.setValue(name[0]);
-        lastName.setValue(name[1]);
+        if (name.length == 1) {
+            firstName.setValue(name[0]);
+            lastName.setValue("");
+        } else {
+            firstName.setValue(name[0]);
+            lastName.setValue(name[1]);
+        }
         userID.setValue(patient.getPatientId());
         userID.setEnabled(false);
+
         email.setValue(patient.getPatientEmail());
         email.setEnabled(false);
+
+
         phoneNumber.setValue(patient.getPatientContact());
         phoneNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
         age.setValue(String.valueOf(patient.getPatientAge()));
@@ -209,6 +202,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
         boolean isImageEmpty = selectedImage == null;
 
+
         System.out.println("isFirstNameEmpty : " + isFirstNameEmpty);
         System.out.println("isFirstNameValid : " + isFirstNameValid);
         System.out.println("isLastNameEmpty : " + isLastNameEmpty);
@@ -237,8 +231,30 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.edit_updateButton:
 //                url.updatePatient();
+                System.out.println("UPDATE BUTTON CLICKED");
+                loadDataFromApi();
                 break;
         }
+
+    }
+
+    private void loadDataFromApi() {
+        updateButton.setEnabled(false);
+        componentLoader.playAnimation();
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("name", firstName.getValueData() + " " + lastName.getValueData());
+            jsonObject.put("image", Helper.convertBitmapToBase64(selectedImage));
+            jsonObject.put("phone", phoneNumber.getValueData());
+            jsonObject.put("gender", genderSelection.getGenderSelection());
+            jsonObject.put("age", age.getValueData());
+        } catch (Exception ex) {
+            System.out.println("Exception in load data from api : " + ex);
+        }
+
+        RoutePut routePut = new RoutePut(this, this);
+        routePut.put(Url.UPDATE_PATIENT +"/"+ URL.LOGGED_IN_PATIENT_ID, jsonObject);
 
     }
 
@@ -259,12 +275,30 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onSuccess(Object object) {
+    public void onSuccess(JSONObject response) {
+        componentLoader.pauseAnimation();
+        updateButton.setEnabled(true);
+        try {
+            response = response.getJSONObject("patient");
+            DPatient dPatient = Helper.getPatient(response);
+            Helper.removeSavedUser(this);
+            Helper.saveUser(this, dPatient.getPatientId(),
+                    dPatient.getPatientName(), dPatient.getPatientEmail(),
+                    dPatient.getPatientContact(), dPatient.getPatientGender(),
+                    dPatient.getPatientImage(), String.valueOf(dPatient.getPatientAge()));
+            Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception ex) {
+            System.out.println("Exception in on success : " + ex);
+        }
 
     }
 
     @Override
     public void onError(Object message) {
+        componentLoader.pauseAnimation();
+        updateButton.setEnabled(true);
+        UtilsDialogue.showErrorDialogue(message.toString(),this);
 
     }
 }

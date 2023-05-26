@@ -1,7 +1,7 @@
 package com.fyp.lucapp.Helper;
 
-import com.fyp.lucapp.BasicModels.Patient;
-import com.fyp.lucapp.BasicModels.SettingsData;
+import com.fyp.lucapp.BasicModels.DPatient;
+import com.fyp.lucapp.BasicModels.DSettings;
 import com.fyp.lucapp.Strings.Strings;
 
 import java.util.ArrayList;
@@ -20,21 +20,21 @@ public class Store {
     public static int SETTINGS_GALLERY_ID = 0;
     public static int SETTINGS_LOGOUT_ID = 0;
 
-    public static Patient LOGGED_IN_PATIENT = null;
+    public static DPatient LOGGED_IN_PATIENT = null;
 
     public static String EMAIL = "sudowolf786@gmail.com";
 
     //add items to setting list
-    public static List<SettingsData> getSettingsList() {
-        List<SettingsData> settingsList = new ArrayList<>();
-        settingsList.add(new SettingsData(0, SettingsData.VIEW_TYPE_SETTING, Strings.EDIT_PROFILE));
-        settingsList.add(new SettingsData(1, SettingsData.VIEW_TYPE_SETTING, Strings.NOTIFICATIONS));
-        settingsList.add(new SettingsData(2, SettingsData.VIEW_TYPE_SETTING, Strings.APPOINTMENTS));
-        settingsList.add(new SettingsData(3, SettingsData.VIEW_TYPE_SETTING, Strings.GALLERY));
-        settingsList.add(new SettingsData(SettingsData.VIEW_TYPE_DIVIDER));
-        settingsList.add(new SettingsData(4, SettingsData.VIEW_TYPE_SETTING, Strings.ACCOUNT));
-        settingsList.add(new SettingsData(5, SettingsData.VIEW_TYPE_SETTING, Strings.HELP_CENTER));
-        settingsList.add(new SettingsData(6, SettingsData.VIEW_TYPE_SETTING, Strings.LOGOUT));
+    public static List<DSettings> getSettingsList() {
+        List<DSettings> settingsList = new ArrayList<>();
+        settingsList.add(new DSettings(0, DSettings.VIEW_TYPE_SETTING, Strings.EDIT_PROFILE));
+//        settingsList.add(new DSettings(1, DSettings.VIEW_TYPE_SETTING, Strings.NOTIFICATIONS));
+//        settingsList.add(new DSettings(2, DSettings.VIEW_TYPE_SETTING, Strings.APPOINTMENTS));
+//        settingsList.add(new DSettings(3, DSettings.VIEW_TYPE_SETTING, Strings.GALLERY));
+        settingsList.add(new DSettings(DSettings.VIEW_TYPE_DIVIDER));
+//        settingsList.add(new DSettings(4, DSettings.VIEW_TYPE_SETTING, Strings.ACCOUNT));
+//        settingsList.add(new DSettings(5, DSettings.VIEW_TYPE_SETTING, Strings.HELP_CENTER));
+        settingsList.add(new DSettings(6, DSettings.VIEW_TYPE_SETTING, Strings.LOGOUT));
         return settingsList;
     }
 

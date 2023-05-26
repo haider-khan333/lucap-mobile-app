@@ -3,7 +3,7 @@ package com.fyp.lucapp.BasicModels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportData {
+public class DReport {
     private String reportID;
     private  String date;
     private String time;
@@ -13,9 +13,9 @@ public class ReportData {
     private String description;
     private String noduleType;
     private String noduleLobe;
-    private List<Medications> medicationsList = new ArrayList<>();
+    private List<DMedications> medicationsList = new ArrayList<>();
 
-    public ReportData() {
+    public DReport() {
     }
 
     public String getReportID() {
@@ -90,11 +90,11 @@ public class ReportData {
         this.noduleLobe = noduleLobe;
     }
 
-    public List<Medications> getMedicationsList() {
+    public List<DMedications> getMedicationsList() {
         return medicationsList;
     }
 
-    public void setMedicationsList(List<Medications> medicationsList) {
+    public void setMedicationsList(List<DMedications> medicationsList) {
         this.medicationsList = medicationsList;
     }
 }

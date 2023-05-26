@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fyp.lucapp.BasicModels.Patient;
+import com.fyp.lucapp.BasicModels.DPatient;
 import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Components.ComponentLoader;
 import com.fyp.lucapp.Helper.Helper;
@@ -17,6 +17,8 @@ import com.fyp.lucapp.Helper.LoaderUtils;
 import com.fyp.lucapp.Helper.URL;
 import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Routes.RoutePost;
+import com.fyp.lucapp.Routes.Url;
 import com.fyp.lucapp.Schemas.GetPatientSchema;
 
 import org.json.JSONObject;
@@ -26,7 +28,7 @@ public class FPEnterEmail extends AppCompatActivity implements InterfaceApi {
     private TextView txtEmail;
     private ComponentLoader loader;
     private Button nextBtn;
-    private URL url;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,6 @@ public class FPEnterEmail extends AppCompatActivity implements InterfaceApi {
         nextBtn = findViewById(R.id.fpNext);
         nextBtn.setEnabled(false);
 
-
-        url = new URL(this, this);
 
         txtEmail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -62,8 +62,26 @@ public class FPEnterEmail extends AppCompatActivity implements InterfaceApi {
             LoaderUtils.showLoader(loader);
             GetPatientSchema patientSchema = new GetPatientSchema();
             patientSchema.setEmail(txtEmail.getText().toString());
-            url.getPatient(patientSchema);
+            loadDataFromApi(patientSchema);
         });
+
+
+    }
+
+
+    private void loadDataFromApi(GetPatientSchema getPatientSchema) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("patient_email", getPatientSchema.getEmail());
+            System.out.println(jsonObject);
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        RoutePost routePost = new RoutePost(this, this);
+        routePost.post(Url.GET_PATIENT, jsonObject);
 
 
     }
@@ -75,14 +93,23 @@ public class FPEnterEmail extends AppCompatActivity implements InterfaceApi {
     }
 
     @Override
-    public void onSuccess(Object object) {
+    public void onSuccess(JSONObject response) {
         LoaderUtils.hideLoader(loader);
-        JSONObject patientObject = (JSONObject) object;
-        Patient patient = Helper.getPatient(patientObject);
+        JSONObject patientObject = (JSONObject) response.optJSONObject("patient");
+        System.out.println("FPEnterEmail: patient object" + patientObject);
+        DPatient patient = Helper.getPatient(patientObject);
+
+        Helper.saveUser(this, patient.getPatientId(),
+                patient.getPatientName(),
+                patient.getPatientEmail(),
+                patient.getPatientContact(),
+                patient.getPatientGender(),
+                patient.getPatientImage(),
+                String.valueOf(patient.getPatientAge()));
+
+        System.out.println("FPEnterEmail: patient saved" + patient.getPatientName());
+
         Intent intent = new Intent(this, FPEnterCode.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("patient", patient);
-        intent.putExtras(bundle);
         startActivity(intent);
 
 

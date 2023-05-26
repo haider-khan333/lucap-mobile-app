@@ -1,8 +1,9 @@
-package com.fyp.lucapp.Views;
+package com.fyp.lucapp.Views.DoctorDetails;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
@@ -13,13 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.fyp.lucapp.BasicModels.DDoctor;
 import com.fyp.lucapp.BasicModels.DSpecificDoctor;
-import com.fyp.lucapp.BasicModels.DoctorsData;
 import com.fyp.lucapp.Components.AppointmentTiming.ComponentAppointmentTiming;
-import com.fyp.lucapp.Components.ComponentCustomDialogue;
 import com.fyp.lucapp.Components.ComponentDoctorList;
 import com.fyp.lucapp.Components.DayNavigation.ComponentDayNavigation;
 import com.fyp.lucapp.Components.DoctorExperience.ComponentDoctorExperience;
@@ -30,44 +31,37 @@ import com.fyp.lucapp.Interface.InterfaceApi;
 import com.fyp.lucapp.Interface.InterfaceAppointments;
 import com.fyp.lucapp.Main;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Routes.RouteGet;
+import com.fyp.lucapp.Routes.RoutePut;
+import com.fyp.lucapp.Routes.Url;
 import com.fyp.lucapp.Schemas.ConfirmAppointmentSchema;
+import com.fyp.lucapp.Utils.UtilsDialogue;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class DoctorDetailsActivity extends AppCompatActivity implements InterfaceApi,
-        View.OnClickListener, InterfaceAppointments {
+        View.OnClickListener {
 
     private FlexboxLayout flexBoxLayout;
     private ComponentDayNavigation componentDayNavigation;
     private ComponentDoctorList componentDoctorList;
-    private ComponentHeader componentHeader;
     private ComponentDoctorExperience componentDoctorExperience;
     private TextView aboutDoctor;
     private int pointer = 0;
     private DSpecificDoctor dSpecificDoctor;
     private LinkedList<Map<String, List<Integer>>> map;
-
     private BottomSheetDialog bottomSheetDialog;
-    private InterfaceAppointments interfaceAppointments;
-    private URL url;
-
+    private String url = "";
     private String gDay;
     private int gTime;
 
@@ -80,79 +74,53 @@ public class DoctorDetailsActivity extends AppCompatActivity implements Interfac
         flexBoxLayout = findViewById(R.id.appointmentGrid);
         componentDayNavigation = findViewById(R.id.dayNavigation);
         componentDoctorList = findViewById(R.id.dd_doctorList);
-        componentHeader = findViewById(R.id.dd_header);
+        ComponentHeader componentHeader = findViewById(R.id.dd_header);
         aboutDoctor = findViewById(R.id.doctorDescription);
         componentDoctorExperience = findViewById(R.id.dd_doctorExperience);
+        TextView contactDoctor = findViewById(R.id.dd_contactDoctor);
 
 
-        DoctorsData doctorsData =
-                ((DoctorsData) getIntent().getSerializableExtra("doctor"));
+        DDoctor doctorsData =
+                ((DDoctor) getIntent().getSerializableExtra("doctor"));
+        System.out.println("DoctorDetailsActivity:: doctor data : " + doctorsData);
+
 
         componentHeader.setTitle("Doctor Details");
 
         componentHeader.addClickListener(this);
         componentDayNavigation.setBackArrowClickListener(this);
         componentDayNavigation.setFrontArrowClickListener(this);
+        contactDoctor.setOnClickListener(this);
 
 
-        InterfaceApi interfaceApi = this;
-        interfaceAppointments = this;
-
-        url = new URL(this, interfaceApi);
-        url.getSpecificDoctor(doctorsData.getId());
+        loadDataFromApi_GetDoctors(doctorsData.getId());
 
 
     }
 
-    private void showAppointmentCalendar(List<Calendar> appointmentDates) {
-        Calendar now = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                        // Handle the selected date
-                    }
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-        );
+    private void loadDataFromApi_GetDoctors(int id) {
+        this.url = "GET_DOCTORS";
+        RouteGet routeGet = new RouteGet(this, this);
+        routeGet.get(Url.GET_DOCTORS + "/" + id + "/" + URL.LOGGED_IN_PATIENT_ID);
 
-        // Highlight appointment dates
-        datePickerDialog.setHighlightedDays(appointmentDates.toArray(new Calendar[0]));
-
-        datePickerDialog.show(getSupportFragmentManager(), "Datepickerdialog");
     }
 
-    private List<Calendar> convertDatesToCalendars(ArrayList<String> appointmentDates) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        List<Calendar> calendars = new ArrayList<>();
-
-        for (String dateString : appointmentDates) {
-            try {
-                Date date = sdf.parse(dateString);
-                if (date != null) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(date);
-                    calendars.add(calendar);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+    private void loadDataFromApi_ConfirmAppointment(String url,
+                                                    ConfirmAppointmentSchema confirmAppointment) {
+        this.url = "CONFIRM_APPOINTMENT";
+        RoutePut routePut = new RoutePut(this, this);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("doctor_id", confirmAppointment.getDoctorID());
+            jsonObject.put("day", confirmAppointment.getDay());
+            jsonObject.put("time", confirmAppointment.getTime());
+        } catch
+        (Exception e) {
+            e.printStackTrace();
         }
 
-        return calendars;
-    }
-
-    private void displayAppointmentsOnCalendar() {
-        ArrayList<String> appointmentDates = new ArrayList<>();
-        // Add your appointment dates as strings in the "yyyy-MM-dd" format
-        appointmentDates.add("2023-05-01");
-        appointmentDates.add("2023-05-03");
-        appointmentDates.add("2023-05-05");
-
-        List<Calendar> calendars = convertDatesToCalendars(appointmentDates);
-        showAppointmentCalendar(calendars);
+        System.out.println("confirm appointment : " + jsonObject.toString());
+        routePut.put(Url.CONFIRM_APPOINTMENT + "/" + URL.LOGGED_IN_PATIENT_ID, jsonObject);
     }
 
     private void setComponentData(DSpecificDoctor dSpecificDoctor) {
@@ -203,12 +171,7 @@ public class DoctorDetailsActivity extends AppCompatActivity implements Interfac
                 String endTime = String.valueOf(Integer.parseInt(startTime) + 1);
                 componentAppointmentTiming.setTiming(startTime + ":00 - " + endTime + ":00");
 
-                componentAppointmentTiming.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        confirmAppointment(startTime, key);
-                    }
-                });
+                componentAppointmentTiming.setOnClickListener(view -> confirmAppointment(startTime, key));
                 flexBoxLayout.addView(componentAppointmentTiming);
             }
         }
@@ -243,7 +206,8 @@ public class DoctorDetailsActivity extends AppCompatActivity implements Interfac
         String date = formattedDate;
         String duration = "60 minutes";
 
-        String template = "I confirm the appointment with %s, of department %s, on %s at %s for a total time of %s.";
+        String template = "I confirm the appointment with %s, of department %s," +
+                " on %s at %s for a total time of %s.";
         String fullText = String.format(template, doctorName, doctorSpeciality,
                 date, startTime, duration);
 
@@ -303,10 +267,23 @@ public class DoctorDetailsActivity extends AppCompatActivity implements Interfac
     }
 
     @Override
-    public void onSuccess(Object object) {
-        JSONObject jsonObject = (JSONObject) object;
-        dSpecificDoctor = Helper.getSpecificDoctorDetails(jsonObject);
-        setComponentData(dSpecificDoctor);
+    public void onSuccess(JSONObject response) {
+        if (this.url.equals("GET_DOCTORS")) {
+            try {
+                JSONObject doctorJson = response.getJSONObject("doctors_list");
+                dSpecificDoctor = Helper.getSpecificDoctorDetails(doctorJson);
+                setComponentData(dSpecificDoctor);
+
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            Toast.makeText(this, "Appointment confirmed", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, Main.class);
+            startActivity(intent);
+            this.finish();
+        }
 
 
     }
@@ -314,10 +291,7 @@ public class DoctorDetailsActivity extends AppCompatActivity implements Interfac
 
     @Override
     public void onError(Object message) {
-        ComponentCustomDialogue componentCustomDialogue = new
-                ComponentCustomDialogue(this, "Error",
-                message.toString(), R.raw.cancel_animation);
-        componentCustomDialogue.onShow();
+        UtilsDialogue.showErrorDialogue(message.toString(), this);
 
     }
 
@@ -344,38 +318,50 @@ public class DoctorDetailsActivity extends AppCompatActivity implements Interfac
         } else if (id == R.id.headerBackButton) {
             onBackPressed();
         } else if (id == R.id.confirmAppointment) {
-            URL url = new URL(getApplicationContext(), this.interfaceAppointments);
-            ConfirmAppointmentSchema confirmAppointmentSchema = new ConfirmAppointmentSchema();
-            confirmAppointmentSchema.setDoctorID(dSpecificDoctor.getId());
-            confirmAppointmentSchema.setDay(gDay);
-            confirmAppointmentSchema.setTime(gTime);
-            url.bookAppointment(confirmAppointmentSchema);
+
+
+            ConfirmAppointmentSchema confirmAppointment = new ConfirmAppointmentSchema();
+            confirmAppointment.setDoctorID(dSpecificDoctor.getId());
+            confirmAppointment.setDay(gDay);
+            confirmAppointment.setTime(gTime);
             bottomSheetDialog.dismiss();
 
+            loadDataFromApi_ConfirmAppointment(Url.CONFIRM_APPOINTMENT + "/" + URL.LOGGED_IN_PATIENT_ID,
+                    confirmAppointment);
 
         } else if (id == R.id.cancelAppointment) {
             bottomSheetDialog.dismiss();
-
+        } else if (id == R.id.dd_contactDoctor) {
+            // Create an AlertDialog.Builder and set the message.
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Contact Doctor Via:");
+            builder.setItems(new CharSequence[]
+                            {"WhatsApp", "SMS", "Gmail"},
+                    (dialog, which) -> {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        switch (which) {
+                            case 0: // WhatsApp
+                                Uri uri = Uri.parse("smsto:" + dSpecificDoctor.getPhone());
+                                Intent i = new Intent(Intent.ACTION_SENDTO, uri);
+                                i.setPackage("com.whatsapp");
+                                startActivity(Intent.createChooser(i, ""));
+                                break;
+                            case 1: // SMS
+                                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                                sendIntent.setData(Uri.parse("sms:" + dSpecificDoctor.getPhone()));
+                                startActivity(sendIntent);
+                                break;
+                            case 2: // Gmail
+                                Intent email = new Intent(Intent.ACTION_SEND);
+                                email.putExtra(Intent.EXTRA_EMAIL, new String[]{dSpecificDoctor.getEmail()});
+                                email.setType("message/rfc822");
+                                startActivity(Intent.createChooser(email, "Choose an Email client :"));
+                                break;
+                        }
+                    });
+            builder.create().show();
         }
-
-    }
-
-
-    @Override
-    public void onAppointmentSuccess() {
-        Toast.makeText(this, "Appointment confirmed", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, Main.class);
-        startActivity(intent);
-        this.finish();
-    }
-
-    @Override
-    public void onAppointmentFailure(Object error) {
-        ComponentCustomDialogue componentCustomDialogue = new
-                ComponentCustomDialogue(this, "Error",
-                error.toString(), R.raw.cancel_animation);
-        componentCustomDialogue.onShow();
-
     }
 }
 

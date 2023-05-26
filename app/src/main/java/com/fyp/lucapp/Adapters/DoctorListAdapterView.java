@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fyp.lucapp.BasicModels.DoctorsData;
+import com.fyp.lucapp.BasicModels.DDoctor;
 import com.fyp.lucapp.Components.ComponentDoctorList;
 import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Interface.InterfaceClickItem;
@@ -18,14 +18,14 @@ import java.util.List;
 
 public class DoctorListAdapterView extends RecyclerView.Adapter<DoctorListAdapterView.DoctorListViewHolder> {
 
-    private List<DoctorsData> doctorsDataList;
+    private List<DDoctor> doctorsDataList;
     private InterfaceClickItem doctorListInterface;
 
     public DoctorListAdapterView() {
 
     }
 
-    public DoctorListAdapterView(List<DoctorsData> items
+    public DoctorListAdapterView(List<DDoctor> items
             , InterfaceClickItem doctorListInterface) {
         doctorsDataList = items;
         this.doctorListInterface = doctorListInterface;
@@ -43,7 +43,7 @@ public class DoctorListAdapterView extends RecyclerView.Adapter<DoctorListAdapte
     @Override
     public void onBindViewHolder(@NonNull DoctorListAdapterView.DoctorListViewHolder holder,
                                  int position) {
-        DoctorsData doctorsData = doctorsDataList.get(position);
+        DDoctor doctorsData = doctorsDataList.get(position);
 
         holder.componentDoctorList.setDoctorName(doctorsData.getUsername());
         holder.componentDoctorList.setDoctorSpeciality(doctorsData.getSpeciality());

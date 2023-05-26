@@ -12,14 +12,19 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyp.lucapp.Adapters.SettingsAdapterView;
-import com.fyp.lucapp.BasicModels.SettingsData;
+import com.fyp.lucapp.BasicModels.DPatient;
+import com.fyp.lucapp.BasicModels.DSettings;
+import com.fyp.lucapp.Components.ComponentUser;
+import com.fyp.lucapp.Helper.Helper;
 import com.fyp.lucapp.Helper.Store;
 import com.fyp.lucapp.R;
+import com.fyp.lucapp.Views.LoginActivity;
 import com.fyp.lucapp.Views.Settings.EditProfileActivity;
 
 import java.util.List;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener {
+    private ComponentUser componentUser;
 
 
     public SettingsFragment() {
@@ -31,10 +36,16 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        componentUser = view.findViewById(R.id.component_user);
+
+        DPatient patient = Helper.getSavedUser(getContext());
+        componentUser.setPatientImage(patient.getPatientImage());
+        componentUser.setPatientName(patient.getPatientName());
+        componentUser.setPatientEmail(patient.getPatientEmail());
 
         RecyclerView recyclerView = view.findViewById(R.id.settingsRecyclerView);
 
-        List<SettingsData> settingData = Store.getSettingsList();
+        List<DSettings> settingData = Store.getSettingsList();
 
         SettingsAdapterView settingsAdapterView = new
                 SettingsAdapterView(this, settingData);
@@ -60,19 +71,26 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         if (id == Store.SETTINGS_EDIT_PROFILE_ID) {
             Intent intent = new Intent(getContext(), EditProfileActivity.class);
             startActivity(intent);
-        } else if (id == Store.SETTINGS_NOTIFICATIONS_ID) {
-            Toast.makeText(getContext(), "Notifications", Toast.LENGTH_SHORT).show();
-        } else if (id == Store.SETTINGS_APPOINTMENTS_ID) {
-            Toast.makeText(getContext(), "Appoinment id", Toast.LENGTH_SHORT).show();
-        } else if (id == Store.SETTINGS_LOGOUT_ID) {
-            Toast.makeText(getContext(), "Logout", Toast.LENGTH_SHORT).show();
-        } else if (id == Store.SETTINGS_HELP_CENTER_ID) {
-            Toast.makeText(getContext(), "help center", Toast.LENGTH_SHORT).show();
-        } else if (id == Store.SETTINGS_ACCOUNT_ID) {
-            Toast.makeText(getContext(), "account", Toast.LENGTH_SHORT).show();
-        } else if (id == Store.SETTINGS_GALLERY_ID) {
-            Toast.makeText(getContext(), "gallery", Toast.LENGTH_SHORT).show();
         }
+//        else if (id == Store.SETTINGS_NOTIFICATIONS_ID) {
+//            Toast.makeText(getContext(), "Notifications", Toast.LENGTH_SHORT).show();
+//        } else if (id == Store.SETTINGS_APPOINTMENTS_ID) {
+//            Toast.makeText(getContext(), "Appoinment id", Toast.LENGTH_SHORT).show();
+//        }
+        else if (id == Store.SETTINGS_LOGOUT_ID) {
+            Helper.removeSavedUser(getContext());
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+
+        }
+//        else if (id == Store.SETTINGS_HELP_CENTER_ID) {
+//            Toast.makeText(getContext(), "help center", Toast.LENGTH_SHORT).show();
+//        } else if (id == Store.SETTINGS_ACCOUNT_ID) {
+//            Toast.makeText(getContext(), "account", Toast.LENGTH_SHORT).show();
+//        } else if (id == Store.SETTINGS_GALLERY_ID) {
+//            Toast.makeText(getContext(), "gallery", Toast.LENGTH_SHORT).show();
+//        }
     }
 
 

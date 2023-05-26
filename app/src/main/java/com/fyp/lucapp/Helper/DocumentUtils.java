@@ -13,9 +13,8 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 
-import com.fyp.lucapp.BasicModels.Medications;
-import com.fyp.lucapp.BasicModels.ReportData;
-import com.google.android.material.snackbar.Snackbar;
+import com.fyp.lucapp.BasicModels.DMedications;
+import com.fyp.lucapp.BasicModels.DReport;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,7 +24,7 @@ import java.util.List;
 public class DocumentUtils {
 
 
-    public static boolean createPDF(ReportData reportDetails, Context context) {
+    public static boolean createPDF(DReport reportDetails, Context context) {
         String reportID = reportDetails.getReportID();
         String patientName = reportDetails.getPatientName();
         String doctorName = reportDetails.getDoctorName();
@@ -36,7 +35,7 @@ public class DocumentUtils {
         String noduleType = reportDetails.getNoduleType();
         String noduleLobe = reportDetails.getNoduleLobe();
         String doctorSpeciality = reportDetails.getDoctorSpeciality();
-        List<Medications> medicationsList = reportDetails.getMedicationsList();
+        List<DMedications> medicationsList = reportDetails.getMedicationsList();
 
 
         PdfDocument pdfDocument = new PdfDocument();
@@ -234,7 +233,7 @@ public class DocumentUtils {
         int medicationStartY = 120;
         paint.setTextSize(14);
 
-        for (Medications medication : medicationsList) {
+        for (DMedications medication : medicationsList) {
             String medicineName = medication.getMedicineName();
             String medicineGrams = medication.getMedicineGrams();
             String medicineDosage = medication.getMedicineDosage();

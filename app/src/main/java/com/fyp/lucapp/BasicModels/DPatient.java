@@ -2,7 +2,7 @@ package com.fyp.lucapp.BasicModels;
 
 import java.io.Serializable;
 
-public class Patient implements Serializable {
+public class DPatient implements Serializable {
 
     private String patientId;
     private String patientName;
@@ -13,11 +13,11 @@ public class Patient implements Serializable {
     private int patientAge;
     private String patientGender;
 
-    public Patient(){}
+    public DPatient(){}
 
-    public Patient(String patientId, String patientName, String patientEmail, String password,
-                   String patientContact,
-                   String patientImage, int patientAge, String patientGender) {
+    public DPatient(String patientId, String patientName, String patientEmail, String password,
+                    String patientContact,
+                    String patientImage, int patientAge, String patientGender) {
         this.patientId = patientId;
         this.patientName = patientName;
         this.patientContact = patientContact;

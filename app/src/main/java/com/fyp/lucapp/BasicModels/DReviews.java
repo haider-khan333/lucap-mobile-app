@@ -2,7 +2,7 @@ package com.fyp.lucapp.BasicModels;
 
 import java.io.Serializable;
 
-public class Reviews implements Serializable {
+public class DReviews implements Serializable {
 
     private int id;
     private String profileImage;
@@ -12,7 +12,7 @@ public class Reviews implements Serializable {
     private String daysAgo;
 
 
-    public Reviews(String profileImage, String name, String review, String rating, String daysAgo) {
+    public DReviews(String profileImage, String name, String review, String rating, String daysAgo) {
         this.profileImage = profileImage;
         this.name = name;
         this.review = review;

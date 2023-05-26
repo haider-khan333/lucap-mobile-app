@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fyp.lucapp.BasicModels.MainCardData;
+import com.fyp.lucapp.BasicModels.DMainCard;
 import com.fyp.lucapp.Components.ComponentMainCard;
 import com.fyp.lucapp.Helper.Store;
 import com.fyp.lucapp.R;
@@ -15,10 +15,10 @@ import com.fyp.lucapp.R;
 import java.util.List;
 
 public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.MainCardViewHolder> {
-    private final List<MainCardData> mainCardDataList;
+    private final List<DMainCard> mainCardDataList;
     private final View.OnClickListener onClickListener;
 
-    public MainCardAdapter(List<MainCardData> mainCardDataList,
+    public MainCardAdapter(List<DMainCard> mainCardDataList,
                            View.OnClickListener onClickListener) {
         this.mainCardDataList = mainCardDataList;
         this.onClickListener = onClickListener;
@@ -34,7 +34,7 @@ public class MainCardAdapter extends RecyclerView.Adapter<MainCardAdapter.MainCa
 
     @Override
     public void onBindViewHolder(@NonNull MainCardViewHolder holder, int position) {
-        MainCardData cardData = mainCardDataList.get(position);
+        DMainCard cardData = mainCardDataList.get(position);
 
         if (cardData.getID() == 0) {
             int uniqueID = View.generateViewId();

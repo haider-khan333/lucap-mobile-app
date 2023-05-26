@@ -49,4 +49,10 @@ public class ComponentGenderSelection extends LinearLayout {
         }
 
     }
+
+    public String getGenderSelection() {
+        int selectedId = radioGroup.getCheckedRadioButtonId();
+        RadioButton radioButton = findViewById(selectedId);
+        return radioButton.getText().toString();
+    }
 }

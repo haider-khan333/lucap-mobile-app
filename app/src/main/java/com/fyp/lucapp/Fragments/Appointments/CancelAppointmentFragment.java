@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyp.lucapp.Adapters.Appointments.CanceledAdapter;
 import com.fyp.lucapp.BasicModels.DAppointment;
+import com.fyp.lucapp.Interface.InterfaceNotFound;
 import com.fyp.lucapp.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CancelAppointmentFragment extends Fragment {
+public class CancelAppointmentFragment extends Fragment implements InterfaceNotFound {
 
 
     private List<DAppointment> appointmentData;
@@ -48,7 +49,7 @@ public class CancelAppointmentFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.cancelledAppointmentAdapter);
 
-        List<DAppointment> appointmentData = onlyShowCancelledAppointments();
+//        List<DAppointment> appointmentData = onlyShowCancelledAppointments();
 
         CanceledAdapter adapter = new CanceledAdapter(
                 appointmentData
@@ -67,5 +68,13 @@ public class CancelAppointmentFragment extends Fragment {
             }
         }
         return ongoingAppointments;
+    }
+
+    @Override
+    public void notFound() {
+
+
+
+
     }
 }

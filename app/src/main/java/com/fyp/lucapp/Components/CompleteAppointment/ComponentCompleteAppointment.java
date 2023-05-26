@@ -21,7 +21,7 @@ public class ComponentCompleteAppointment extends CardView {
     private TextView docSpeciality;
     private TextView docName;
     private TextView dateTiming;
-    private Button leaveReviewBtn;
+//    private TextView leaveReviewBtn;
 
 
     public ComponentCompleteAppointment(@NonNull Context context) {
@@ -45,7 +45,7 @@ public class ComponentCompleteAppointment extends CardView {
         docSpeciality = view.findViewById(R.id.cmp_docSpeciality);
         docName = view.findViewById(R.id.cmp_doctorName);
         dateTiming = view.findViewById(R.id.cmp_dateTime);
-        leaveReviewBtn = view.findViewById(R.id.cmp_leaveReviewBtn);
+//        leaveReviewBtn = view.findViewById(R.id.cmp_leaveReviewBtn);
 
         this.setBackground(null);
     }
@@ -67,9 +67,9 @@ public class ComponentCompleteAppointment extends CardView {
         this.dateTiming.setText(dateTiming);
     }
 
-    public void addOnCLickListener(OnClickListener onClickListener) {
-        leaveReviewBtn.setOnClickListener(onClickListener);
-    }
+//    public void addOnCLickListener(OnClickListener onClickListener) {
+//        leaveReviewBtn.setOnClickListener(onClickListener);
+//    }
 
 
 }

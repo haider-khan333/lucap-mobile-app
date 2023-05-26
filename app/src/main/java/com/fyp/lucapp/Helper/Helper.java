@@ -1,14 +1,17 @@
 package com.fyp.lucapp.Helper;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import com.fyp.lucapp.BasicModels.DAppointment;
+import com.fyp.lucapp.BasicModels.DDoctor;
+import com.fyp.lucapp.BasicModels.DMedications;
+import com.fyp.lucapp.BasicModels.DPatient;
+import com.fyp.lucapp.BasicModels.DReport;
 import com.fyp.lucapp.BasicModels.DSpecificDoctor;
-import com.fyp.lucapp.BasicModels.Data;
-import com.fyp.lucapp.BasicModels.DoctorsData;
-import com.fyp.lucapp.BasicModels.Medications;
-import com.fyp.lucapp.BasicModels.Patient;
-import com.fyp.lucapp.BasicModels.ReportData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,19 +27,17 @@ import java.util.Map;
 
 public class Helper {
 
-    /**
-     * return a doctor from doctor list
-     *
-     * @return
-     */
-    public static DoctorsData getDoctor(int position) {
-        return Data.doctors.get(position);
-    }
 
     /**
      * Convert string base64 to bitmap
      */
     public static Bitmap convertBase64ToBitmap(String base64) {
+        String header = "data:image/png;base64,";
+        if (base64.startsWith(header)) {
+            base64 = base64.substring(header.length());
+        }
+
+        System.out.println("helper::base64 " + base64);
         byte[] decodedString = android.util.Base64.decode(base64, android.util.Base64.DEFAULT);
         return android.graphics.BitmapFactory.decodeByteArray(decodedString,
                 0, decodedString.length);
@@ -102,11 +103,11 @@ public class Helper {
         }
     }
 
-    public static ArrayList<DoctorsData> getDoctors(JSONArray docList) {
-        ArrayList<DoctorsData> doctorsDataArrayList = new ArrayList<>();
+    public static ArrayList<DDoctor> getDoctors(JSONArray docList) {
+        ArrayList<DDoctor> doctorsDataArrayList = new ArrayList<>();
         try {
             for (int i = 0; i < docList.length(); i++) {
-                DoctorsData doctorsData = new DoctorsData();
+                DDoctor doctorsData = new DDoctor();
                 doctorsData.setId(docList.getJSONObject(i).getInt("id"));
                 doctorsData.setUsername(docList.getJSONObject(i).getString("username"));
                 doctorsData.setImage(docList.getJSONObject(i).getString("image"));
@@ -189,11 +190,11 @@ public class Helper {
     }
 
 
-    public static ArrayList<ReportData> getReportList(JSONArray reportList) {
-        ArrayList<ReportData> reportDataArrayList = new ArrayList<>();
+    public static ArrayList<DReport> getReportList(JSONArray reportList) {
+        ArrayList<DReport> reportDataArrayList = new ArrayList<>();
         try {
             for (int i = 0; i < reportList.length(); i++) {
-                ReportData reportData = new ReportData();
+                DReport reportData = new DReport();
                 reportData.setPatientName(reportList.getJSONObject(i).optString("patient_name"));
                 reportData.setDoctorName(reportList.getJSONObject(i).optString("doctor_name"));
                 reportData.setDoctorSpeciality(reportList.getJSONObject(i).optString("doctor_speciality"));
@@ -204,12 +205,12 @@ public class Helper {
                 reportData.setDescription(reportList.getJSONObject(i).optString("description"));
                 reportData.setReportID(reportList.getJSONObject(i).optString("id"));
 
-                List<Medications> medicationsList = new ArrayList<>();
+                List<DMedications> medicationsList = new ArrayList<>();
                 JSONArray medications = reportList.getJSONObject(i).optJSONArray("medications");
                 if (medications != null) {
                     for (int j = 0; j < medications.length(); j++) {
                         JSONObject medicationObject = medications.optJSONObject(j);
-                        Medications medication = new Medications();
+                        DMedications medication = new DMedications();
                         medication.setMedicineName(medicationObject.optString("medicine_name"));
                         medication.setMedicineGrams(medicationObject.optString("medicine_grams"));
                         medication.setMedicineDosage(medicationObject.optString("medicine_dosage"));
@@ -233,11 +234,11 @@ public class Helper {
 
     }
 
-    public static ArrayList<Medications> getMedicines(JSONArray medicineList) {
-        ArrayList<Medications> medicationsArrayList = new ArrayList<>();
+    public static ArrayList<DMedications> getMedicines(JSONArray medicineList) {
+        ArrayList<DMedications> medicationsArrayList = new ArrayList<>();
         try {
             for (int i = 0; i < medicineList.length(); i++) {
-                Medications medications = new Medications();
+                DMedications medications = new DMedications();
                 medications.setMedicineName(medicineList.getJSONObject(i).optString("medicine_name"));
                 medications.setMedicineGrams(medicineList.getJSONObject(i).optString("medicine_grams"));
                 medications.setMedicineDosage(medicineList.getJSONObject(i).optString("medicine_dosage"));
@@ -251,8 +252,8 @@ public class Helper {
         return medicationsArrayList;
     }
 
-    public static Patient getPatient(JSONObject patientObject) {
-        Patient patient = new Patient();
+    public static DPatient getPatient(JSONObject patientObject) {
+        DPatient patient = new DPatient();
         try {
             patient.setPatientId(String.valueOf(patientObject.optInt("id")));
             patient.setPatientName(patientObject.optString("username"));
@@ -311,6 +312,75 @@ public class Helper {
         }
 
         return maskedLocalPart + "@" + domain;
+    }
+
+    public static void removeUserID() {
+        URL.LOGGED_IN_PATIENT_ID = "";
+    }
+
+    public static void setUserID(String userID) {
+        URL.LOGGED_IN_PATIENT_ID = userID;
+    }
+
+    public static void removeSavedUser(Context context) {
+        //remove user data from shared preferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetail", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.remove("userID");
+        editor.remove("userName");
+        editor.remove("userEmail");
+        editor.remove("userPhone");
+        editor.remove("userGender");
+        editor.remove("userImage");
+        editor.remove("userAge");
+        editor.apply();
+        //remove user data from static variable
+        removeUserID();
+    }
+
+    public static void saveUser(Context context,
+                                String userID, String userName,
+                                String userEmail, String userPhone,
+                                String userGender, String userImage,
+                                String userAge) {
+        //save user data in shared preferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetail", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("userID", userID);
+        editor.putString("userName", userName);
+        editor.putString("userEmail", userEmail);
+        editor.putString("userPhone", userPhone);
+        editor.putString("userGender", userGender);
+        editor.putString("userImage", userImage);
+        editor.putString("userAge", userAge);
+        editor.apply();
+        //save user data in static variable
+        setUserID(userID);
+    }
+
+    public static DPatient getSavedUser(Context context) {
+        //get user data from shared preferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences("userDetail", MODE_PRIVATE);
+        String userID = sharedPreferences.getString("userID", "");
+        String userName = sharedPreferences.getString("userName", "");
+        String userEmail = sharedPreferences.getString("userEmail", "");
+        String userPhone = sharedPreferences.getString("userPhone", "");
+        String userGender = sharedPreferences.getString("userGender", "");
+        String userImage = sharedPreferences.getString("userImage", "");
+        String userAge = sharedPreferences.getString("userAge", "");
+
+        DPatient patient = new DPatient();
+        patient.setPatientId(userID);
+        patient.setPatientName(userName);
+        patient.setPatientEmail(userEmail);
+        patient.setPatientContact(userPhone);
+        patient.setPatientGender(userGender);
+        patient.setPatientImage(userImage);
+        patient.setPatientAge(Integer.parseInt(userAge));
+
+        return patient;
     }
 
 
