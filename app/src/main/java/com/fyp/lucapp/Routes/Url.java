@@ -4,7 +4,7 @@ import com.fyp.lucapp.Helper.URL;
 
 public class Url {
 
-    public static String BASE_URL = "http://192.168.249.225:8000";
+    public static String BASE_URL = "http://192.168.37.225:8000";
 
     public static String GET_APPOINTMENTS = BASE_URL + "/appointment/patient/get-appointments";
 

@@ -9,7 +9,7 @@ import com.fyp.lucapp.Interface.RegisterCallback;
 
 public class URL {
     public static String LOGGED_IN_PATIENT_ID;
-    private static final String IP = "http://192.168.1.65:8000";
+    private static final String IP = "http://192.168.37.225:8000";
     private final String GET_DOCTORS = IP + "/doctor/get-doctors";
     private final Context context;
     private LoginCallback loginCallback;
